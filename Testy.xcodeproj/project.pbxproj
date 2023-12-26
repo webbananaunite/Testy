@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		983359092B3A599500DBAAE1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 983359042B3A599500DBAAE1 /* README.md */; };
+		9833590A2B3A599500DBAAE1 /* READMEjp.md in Resources */ = {isa = PBXBuildFile; fileRef = 983359072B3A599500DBAAE1 /* READMEjp.md */; };
+		9833590B2B3A599500DBAAE1 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 983359082B3A599500DBAAE1 /* LICENSE */; };
 		98397886249C7A1900002D1C /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98397885249C7A1900002D1C /* Log.swift */; };
 		9839FE4F25108B6600010C83 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9839FE4E25108B6600010C83 /* Pin.swift */; };
 		9839FE51251092AC00010C83 /* Information.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9839FE50251092AC00010C83 /* Information.swift */; };
@@ -67,6 +70,9 @@
 
 /* Begin PBXFileReference section */
 		982BC4E32A8EF41300C06F2A /* Testy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Testy.entitlements; sourceTree = "<group>"; };
+		983359042B3A599500DBAAE1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		983359072B3A599500DBAAE1 /* READMEjp.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = READMEjp.md; sourceTree = SOURCE_ROOT; };
+		983359082B3A599500DBAAE1 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		98397885249C7A1900002D1C /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		9839FE4E25108B6600010C83 /* Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		9839FE50251092AC00010C83 /* Information.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Information.swift; sourceTree = "<group>"; };
@@ -171,6 +177,9 @@
 		9881524D247DE78400C4C791 /* Testy */ = {
 			isa = PBXGroup;
 			children = (
+				983359082B3A599500DBAAE1 /* LICENSE */,
+				983359042B3A599500DBAAE1 /* README.md */,
+				983359072B3A599500DBAAE1 /* READMEjp.md */,
 				982BC4E32A8EF41300C06F2A /* Testy.entitlements */,
 				98563DD1250F725E006EB1D1 /* DomainService */,
 				98563DD0250F723B006EB1D1 /* Domain */,
@@ -307,8 +316,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				983359092B3A599500DBAAE1 /* README.md in Resources */,
 				9881525B247DE78600C4C791 /* LaunchScreen.storyboard in Resources */,
+				9833590A2B3A599500DBAAE1 /* READMEjp.md in Resources */,
 				98815258247DE78600C4C791 /* Assets.xcassets in Resources */,
+				9833590B2B3A599500DBAAE1 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
