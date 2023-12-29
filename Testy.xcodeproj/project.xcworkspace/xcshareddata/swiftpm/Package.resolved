@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "blocks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/webbananaunite/blocks",
+      "state" : {
+        "revision" : "92d6cc9817c432551d49eca2c0b4cb5c87810560",
+        "version" : "0.0.1"
+      }
+    },
+    {
+      "identity" : "overlaynetwork",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/webbananaunite/overlayNetwork",
+      "state" : {
+        "revision" : "c3f2746e87c18ecd71990aedb80336101275ab42",
+        "version" : "0.0.1"
+      }
+    }
+  ],
+  "version" : 2
+}
