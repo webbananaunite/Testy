@@ -284,6 +284,7 @@ struct Birth: View {
         }   //VStack
         .navigationBarTitle("Birth")
     }
+    //#now should modify for showing message as done inited finger table.
     
     func reply(to destinationDhtAddress: OverlayNetworkAddressAsHexString, description: String, transactionType: TransactionType, claim: (any Claim)?, transactionId: String, node: Node, combinedSealedBox: Data?, attachedFileType: FileType?, personalData: ClaimOnPerson.PersonalData?, peerPublicKey: PublicKey, peerPublicKeyForEncryptionAsData: PublicKeyForEncryption) {
         Log()

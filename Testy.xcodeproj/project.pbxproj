@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -30,7 +30,6 @@
 		98815258247DE78600C4C791 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98815257247DE78600C4C791 /* Assets.xcassets */; };
 		9881525B247DE78600C4C791 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98815259247DE78600C4C791 /* LaunchScreen.storyboard */; };
 		9887EBF429776149006E08D2 /* DataArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9887EBF329776149006E08D2 /* DataArithmetic.swift */; };
-		98A573062B3E405A00936D5F /* blocks in Frameworks */ = {isa = PBXBuildFile; productRef = 98A573052B3E405A00936D5F /* blocks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +70,8 @@
 		9881525A247DE78600C4C791 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9881525C247DE78600C4C791 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9887EBF329776149006E08D2 /* DataArithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataArithmetic.swift; sourceTree = "<group>"; };
+		98CC20562B43D8B30014B5C0 /* overlayNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = overlayNetwork; path = ../overlayNetwork; sourceTree = "<group>"; };
+		98CC20572B43D9A80014B5C0 /* blocks */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = blocks; path = ../blocks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +86,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98A573062B3E405A00936D5F /* blocks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +95,8 @@
 		98501C692A8EF7B800B5064B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				98CC20572B43D9A80014B5C0 /* blocks */,
+				98CC20562B43D8B30014B5C0 /* overlayNetwork */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -208,7 +210,6 @@
 			);
 			name = Testy;
 			packageProductDependencies = (
-				98A573052B3E405A00936D5F /* blocks */,
 			);
 			productName = Testy;
 			productReference = 9881524B247DE78400C4C791 /* Testy.app */;
@@ -243,7 +244,6 @@
 			);
 			mainGroup = 98815242247DE78400C4C791;
 			packageReferences = (
-				98A573042B3E405A00936D5F /* XCRemoteSwiftPackageReference "blocks" */,
 			);
 			productRefGroup = 9881524C247DE78400C4C791 /* Products */;
 			projectDirPath = "";
@@ -581,25 +581,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		98A573042B3E405A00936D5F /* XCRemoteSwiftPackageReference "blocks" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/webbananaunite/blocks";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		98A573052B3E405A00936D5F /* blocks */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 98A573042B3E405A00936D5F /* XCRemoteSwiftPackageReference "blocks" */;
-			productName = blocks;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 98815243247DE78400C4C791 /* Project object */;
 }
