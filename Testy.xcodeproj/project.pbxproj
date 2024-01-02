@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -30,6 +30,7 @@
 		98815258247DE78600C4C791 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98815257247DE78600C4C791 /* Assets.xcassets */; };
 		9881525B247DE78600C4C791 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98815259247DE78600C4C791 /* LaunchScreen.storyboard */; };
 		9887EBF429776149006E08D2 /* DataArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9887EBF329776149006E08D2 /* DataArithmetic.swift */; };
+		988CB9DF2B43FB83005420E6 /* blocks in Frameworks */ = {isa = PBXBuildFile; productRef = 988CB9DE2B43FB83005420E6 /* blocks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				988CB9DF2B43FB83005420E6 /* blocks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +212,7 @@
 			);
 			name = Testy;
 			packageProductDependencies = (
+				988CB9DE2B43FB83005420E6 /* blocks */,
 			);
 			productName = Testy;
 			productReference = 9881524B247DE78400C4C791 /* Testy.app */;
@@ -244,6 +247,7 @@
 			);
 			mainGroup = 98815242247DE78400C4C791;
 			packageReferences = (
+				988CB9DD2B43FB83005420E6 /* XCRemoteSwiftPackageReference "blocks" */,
 			);
 			productRefGroup = 9881524C247DE78400C4C791 /* Products */;
 			projectDirPath = "";
@@ -504,6 +508,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = "0.1 Alpha";
 				OTHER_LDFLAGS = (
 					"-l",
@@ -535,6 +540,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = "0.1 Alpha";
 				OTHER_LDFLAGS = (
 					"-l",
@@ -581,6 +587,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		988CB9DD2B43FB83005420E6 /* XCRemoteSwiftPackageReference "blocks" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/webbananaunite/blocks";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		988CB9DE2B43FB83005420E6 /* blocks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 988CB9DD2B43FB83005420E6 /* XCRemoteSwiftPackageReference "blocks" */;
+			productName = blocks;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 98815243247DE78400C4C791 /* Project object */;
 }
