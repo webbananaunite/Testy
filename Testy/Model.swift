@@ -24,7 +24,8 @@ class Model: ObservableObject {
     @Published var ownNode: Node?
     
     @Published var screens = [Screen]()
-    
+    @Published var overlayNetworkStatus: String?
+
     @Published var balanceInCachedBlock: BK = Decimal.zero      //直近blockまでの残高
     @Published var consumedAmountOfPublishedTransaction: BK = Decimal.zero      //未BlockedのPublished Transactionでの消費高
 

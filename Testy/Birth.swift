@@ -126,14 +126,60 @@ struct Birth: View {
                          transform content string to Claim Object
                          */
                         let claimObject: ClaimOnPerson.Object = transaction.claimObject as! ClaimOnPerson.Object
-                        let destination = claimObject.destination
+                        let claimDestination = claimObject.destination.toString
                         let peerPublicKeyForEncryptionAsData = claimObject.publicKeyForEncryption
                         let combinedSealedBox = claimObject.combinedSealedBox
                         let attachedFileType = FileType(rawValue: claimObject.attachedFileType)
                         let description = claimObject.description
                         let personalData = claimObject.personalData
 
-                        VStack {
+                        VStack(alignment: .leading) {
+                            Group {
+                                Label("From", systemImage: "")
+                                    .bold()
+                                Text(transaction.makerDhtAddressAsHexString.toString)
+                                    .font(.caption)
+                                Label("Claim", systemImage: "")
+                                    .bold()
+                                Text(transaction.claim.rawValueWithAbstract ?? "")
+                                    .font(.caption)
+                                Label("Destination", systemImage: "")
+                                    .bold()
+                                Text(claimDestination)
+                                    .font(.caption)
+                            }
+                            .padding(.bottom)
+                            Group {
+                                /*
+                                 FT (Find Transaction) Claimed Content
+                                 */
+                                Label("Description:", systemImage: "")
+                                    .bold()
+                                Text(description)
+                                    .font(.caption)
+                                Label("Name", systemImage: "")
+                                    .bold()
+                                Text(personalData.name)
+                                    .font(.caption)
+                                Label("Birth", systemImage: "")
+                                    .bold()
+                                Text(personalData.birth)
+                                    .font(.caption)
+                                Label("Phone", systemImage: "")
+                                    .bold()
+                                Text(personalData.phone)
+                                    .font(.caption)
+                                Label("Place", systemImage: "")
+                                    .bold()
+                                Text(personalData.place)
+                                    .font(.caption)
+                                Label("Born Place", systemImage: "")
+                                    .bold()
+                                Text(personalData.bornPlace)
+                                    .font(.caption)
+                            }
+                            .padding(.bottom)
+                            /*
                             Group {
                                 Label("Transfer:", systemImage: "")
                                 Group {
@@ -151,6 +197,7 @@ struct Birth: View {
                                         .font(.caption)
                                 }
                             }
+                             */
                             Button("Birth重複チェック") {
                                 if let signer = node.signer() {
                                     if transaction.validate() {
@@ -284,7 +331,7 @@ struct Birth: View {
         }   //VStack
         .navigationBarTitle("Birth")
     }
-    //#now should modify for showing message as done inited finger table.
+    //#now should modify for showing message as done inited finger table. I'll do tomorrow.
     
     func reply(to destinationDhtAddress: OverlayNetworkAddressAsHexString, description: String, transactionType: TransactionType, claim: (any Claim)?, transactionId: String, node: Node, combinedSealedBox: Data?, attachedFileType: FileType?, personalData: ClaimOnPerson.PersonalData?, peerPublicKey: PublicKey, peerPublicKeyForEncryptionAsData: PublicKeyForEncryption) {
         Log()

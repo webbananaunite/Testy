@@ -9,7 +9,7 @@
 import SwiftUI
 import LocalAuthentication
 import blocks
-import overlayNetwork
+import overlayNetworkObjc
 
 struct TYButtonStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
@@ -34,6 +34,7 @@ struct TYTextFieldStyle: TextFieldStyle {
 }
 
 enum Screen: Hashable {
+//    case auth
     case menu
     case birth
     case mail
@@ -51,13 +52,13 @@ struct Auth: View {
     var body: some View {
         NavigationStack(path: $model.screens) {
             VStack {
-                Text("こんにちは")
+                Text("Welcome")
                     .padding(.top, 50)
                 Spacer()
                 /*
                  Menu へ
                  */
-                Button("生体認証") {
+                Button("Join blocks Network") {
                     Log()
                     /*
                      Check in by Biometric Authentication.
@@ -67,9 +68,11 @@ struct Auth: View {
                 .buttonStyle(TYButtonStyle())
                 Spacer()
             }
-            .navigationBarTitle("住民基本台帳")
+            .navigationBarTitle("SSN, 住民基本台帳")
             .navigationDestination(for: Screen.self) { screen in
                 switch screen {
+//                case .auth:
+//                    Auth().environmentObject(Model.shared)
                 case .menu:
                     Menu()
                 case .birth:
@@ -91,10 +94,45 @@ struct Auth: View {
              Ask Allowing Network Access.
              */
             Node.triggerLocalNetworkPrivacyAlert()
+            Log()
+            /*
+             Ask Allowing make Popup Notification to User.
+             */
+            UNUserNotificationCenter.current().getNotificationSettings(completionHandler: {
+                settings in
+                Log(settings.authorizationStatus.rawValue)
+                if settings.authorizationStatus != .authorized {    //2
+                    Log()
+                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+                        granted, error in
+                        Log(granted)
+                        if let error = error {
+                            Log(error)
+                        }
+                    }
+                }
+            })
         }
         .alert("Can't establish connection.", isPresented: $model.networkUnavailable) {
             Button("OK", role: .cancel) {
                 Log()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name.pleaseJoinNetworkNotification)) { data in
+            Log("onReceive")
+            var statusString = ""
+            if let content = (data.object as? UNNotificationContent){
+                Log("title:\(content.title), subtitle:\(content.subtitle)")
+                statusString = content.title
+            }
+            if let description = data.userInfo?["description"] as? String, description != "" {
+                Log(description)
+//                statusString = description
+            }
+            if statusString != "" {
+                Task {
+                    await Notification.notifyToUser(statusString)
+                }
             }
         }
     }
