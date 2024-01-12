@@ -29,7 +29,6 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
 
 @main
 struct TestyApp: App {
-    @EnvironmentObject var model: Model
     /*
      Enable the line, if Use AppDelegate System.
      
@@ -65,16 +64,22 @@ struct TestyApp: App {
                 Log("App Enter Background.")
                 //carry out as App go into Background.
 //#tmp                scheduleAsBGApp()
+                Model.shared.semaphore.signal()     //semaphore +1
             }
             if status == .active {
                 Log("App Enter Foreground.")
                 //carry out as App come into Foreground.
+                /*
+                 Wait for update Model.shared.screens to current.
+                 */
+                Log(Model.shared.semaphore.debugDescription)
+//                Model.shared.semaphore.wait()
+                let waitResult = Model.shared.semaphore.wait(timeout: .now() + 10)  //Seconds   semaphore > 1 ? throw and -1 : wait
+                Log(waitResult)
+                Log(Model.shared.semaphore.debugDescription)
                 Task {
                     do {
-                        /*
-                         Wait for update Model.shared.screens to current.
-                         */
-                        try await Task.sleep(nanoseconds: 2 * 1024 * 1024 * 1024)
+//                        try await Task.sleep(nanoseconds: 2 * 1024 * 1024 * 1024)
                         Log(Model.shared.screens.last)
                         if let screenLast = Model.shared.screens.last {
                             Log("be in \(screenLast) View")
@@ -87,9 +92,9 @@ struct TestyApp: App {
                             }
                         } else {
                             Log("be in Auth View")
-                            Task {
-                                await Notification.notifyToViews("Please Tap Join blocks Network Button.", name: Notification.Name.pleaseJoinNetworkNotification)
-                            }
+//                            Task {
+//                                await Notification.notifyToViews("Please Tap Join blocks Network Button.", name: Notification.Name.pleaseJoinNetworkNotification)
+//                            }
                         }
                     } catch {
                         Log(error)

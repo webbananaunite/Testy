@@ -48,7 +48,7 @@ https://github.com/webbananaunite/blocks
 8) overlayNetwork/Domain/Dht.swift 227行目にある{bootnodes}をあなたのローカルネットワークで最初に起動するデバイスのIPアドレスに変更します。  
 * アルファ版ではローカルネットワーク内でのみ動作可能です。
 9) Xcodeでビルド、デバイスやシミュレータへのインストールを行います。  
-10) アプリを起動し、"生体認証"ボタンをタップします。  
+10) アプリを起動し、"Join blocks Network"ボタンをタップします。  
 11) DHCテーブルの初期化が完了するまで8分ほど待ちます。  
 ### Carthage
 - $ cd your project directory

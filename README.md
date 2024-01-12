@@ -45,7 +45,7 @@ https://github.com/webbananaunite/blocks
 8) Modify {bootnodes} to First Booting Device's IP depending your local network in overlayNetwork/Domain/Dht.swift l.227  
 * Alpha Version cause Runnable in Your Local Network Only.  
 9) Xcode Build and Install Devices or Simulators.  
-10) Open App and Tap "生体認証" Button.  
+10) Open App and Tap "Join blocks Network" Button.  
 11) Wait Around 8 min. up to Done Initialize DHC table.  
 ### Carthage
 - $ cd your project directory

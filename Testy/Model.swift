@@ -33,4 +33,5 @@ class Model: ObservableObject {
      Property
      */
     var babysitterNodeIp: String?
+    var semaphore: DispatchSemaphore = DispatchSemaphore(value: 1)
 }

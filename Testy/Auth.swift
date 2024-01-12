@@ -90,6 +90,7 @@ struct Auth: View {
         }
         .onAppear() {
             Log()
+            Log(model.semaphore.description)
             /*
              Ask Allowing Network Access.
              */
@@ -118,23 +119,23 @@ struct Auth: View {
                 Log()
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name.pleaseJoinNetworkNotification)) { data in
-            Log("onReceive")
-            var statusString = ""
-            if let content = (data.object as? UNNotificationContent){
-                Log("title:\(content.title), subtitle:\(content.subtitle)")
-                statusString = content.title
-            }
-            if let description = data.userInfo?["description"] as? String, description != "" {
-                Log(description)
-//                statusString = description
-            }
-            if statusString != "" {
-                Task {
-                    await Notification.notifyToUser(statusString)
-                }
-            }
-        }
+//        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name.pleaseJoinNetworkNotification)) { data in
+//            Log("onReceive")
+//            var statusString = ""
+//            if let content = (data.object as? UNNotificationContent){
+//                Log("title:\(content.title), subtitle:\(content.subtitle)")
+//                statusString = content.title
+//            }
+//            if let description = data.userInfo?["description"] as? String, description != "" {
+//                Log(description)
+////                statusString = description
+//            }
+//            if statusString != "" {
+//                Task {
+//                    await Notification.notifyToUser(statusString)
+//                }
+//            }
+//        }
     }
     
     private func checkIn() -> Void {
@@ -312,9 +313,16 @@ struct Auth: View {
                     } else {
                         ownNode.join(babysitterNode: babysitterNode)    //babysitterNode is nil if bootnode
                     }
+                    Log()
                     Task { @MainActor in
+                        Log()
+//                        model.semaphore.signal()
                         self.model.screens += [.menu]
+                        Log()
                     }
+                    Log(model.semaphore.debugDescription)
+                    model.semaphore.signal()    //semaphore +1
+                    Log(model.semaphore.debugDescription)
                 } else {
                     let message = error?.localizedDescription ?? "Auth Failed"
                     Log(message)
