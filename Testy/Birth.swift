@@ -113,15 +113,24 @@ struct Birth: View {
             /*
              Reveal all Mail about Birth.
              */
-            Text("Received Birth Requests")
+            Text("Received Transactions as Birth-Related")
                 .font(.title)
+            Text("ex. Find a Reference, Request Birth Certificate")
+                .font(.caption2)
+            Text("Birth関連Transaction一覧（ex. 身元保証人を探している、出生証明書リクエスト）")
+                .font(.caption2)
                 .padding()
             Form {
                 if let node = model.ownNode {
                     let _ = Log(node.book.blocks.count)
+                    /*
+                     At Chaining new Block, have checked if duplicate Birth Person already.
+                     */
                     let transactions = node.book.extract(node: node, transactionType: .person) as! [ImplementedPerson]
                     let _ = Log(transactions.count)
                     ForEach(transactions, id: \.self) { transaction in
+                        let transactionType = transaction.type
+                        let claim = transaction.claim
                         /*
                          transform content string to Claim Object
                          */
@@ -129,6 +138,7 @@ struct Birth: View {
                         let claimDestination = claimObject.destination.toString
                         let peerPublicKeyForEncryptionAsData = claimObject.publicKeyForEncryption
                         let combinedSealedBox = claimObject.combinedSealedBox
+                        let combinedSealedBoxAsData = combinedSealedBox.base64DecodedData
                         let attachedFileType = FileType(rawValue: claimObject.attachedFileType)
                         let description = claimObject.description
                         let personalData = claimObject.personalData
@@ -151,7 +161,7 @@ struct Birth: View {
                             .padding(.bottom)
                             Group {
                                 /*
-                                 FT (Find Transaction) Claimed Content
+                                 FT (Find Taker) Claimed Content
                                  */
                                 Label("Description:", systemImage: "")
                                     .bold()
@@ -198,20 +208,14 @@ struct Birth: View {
                                 }
                             }
                              */
-                            Button("Birth重複チェック") {
-                                if let signer = node.signer() {
-                                    if transaction.validate() {
-                                        //valid
-                                        personDuplicationResult = "It's Fine."
-                                        doneCheckDuplicatePerson = true
-                                    } else {
-                                        //Duplicated
-                                        personDuplicationResult = "It's Duplicated Person."
-                                        doneCheckDuplicatePerson = true
-                                    }
+                            Button("Take Charge of Reference") {
+                                //Send FT_ Command.
+                                if let transactionId = transaction.transactionId, let node = model.ownNode, let transactionPublicKey = transaction.publicKey, let peerPublicKeyForEncryptionAsData = peerPublicKeyForEncryptionAsData {
+                                    reply(to: transaction.makerDhtAddressAsHexString, description: description, transactionType: transactionType, claim: claim, transactionId: transactionId, node: node, combinedSealedBox: combinedSealedBoxAsData, attachedFileType: attachedFileType, personalData: nil, peerPublicKeyAsData: transactionPublicKey, peerPublicKeyForEncryptionAsData: peerPublicKeyForEncryptionAsData)
                                 }
                             }
-                            .disabled(transaction.claim.rawValue != ClaimOnPerson.askForTaker.rawValue)
+                            .padding(.bottom)
+                            .disabled(transaction.claim.rawValue != ClaimOnPerson.findTaker.rawValue)
                             Button("添付文書を見る(ダウンロード)") {
                                 /*
                                  for Taker
@@ -235,7 +239,7 @@ struct Birth: View {
                                 if let transactionPublicKey = transaction.publicKey {
                                     let peerSigner = Signer(publicKeyAsData: transactionPublicKey, makerDhtAddressAsHexString: transaction.makerDhtAddressAsHexString, publicKeyForEncryptionAsData: peerPublicKeyForEncryptionAsData)
                                     if let peerPublicKeyForEncryption = peerSigner.publicKeyForEncryption {
-                                        if let fileAsEncryptedData = combinedSealedBox.base64DecodedData {
+                                        if let fileAsEncryptedData = combinedSealedBoxAsData {
                                             //decryption
                                             if let fileAsData = model.ownNode?.signer()?.decrypt(combinedSealedBox: fileAsEncryptedData, peerPublicKeyForEncryption: peerPublicKeyForEncryption) {
                                                 /*
@@ -257,6 +261,8 @@ struct Birth: View {
                                     }
                                 }
                             }
+                            .padding(.bottom)
+                            .disabled(transaction.claim.rawValue != ClaimOnPerson.askForTaker.rawValue)
                             .sheet(isPresented: $showingPreview) {
                                 VStack {
                                     HStack {
@@ -271,8 +277,10 @@ struct Birth: View {
                                     }
                                 }
                             }
-                            Button("Publish Transaction(Person)") {
+                            Button("Publish Birth-Certificate as Reference") {
                                 /*
+                                 Publish Birth-Certificate as Reference
+                                 
                                  Person (Birth-ed) Transaction を publishする
                                  入金　Taker手数料　→Taker（自分）
                                  入金　出生時 basic income　→Birth-er
@@ -301,6 +309,7 @@ struct Birth: View {
                                     }
                                 }
                             }
+                            .padding(.bottom)
                             .disabled(transaction.claim.rawValue != ClaimOnPerson.askForTaker.rawValue)
                         }
                     }
@@ -331,17 +340,16 @@ struct Birth: View {
         }   //VStack
         .navigationBarTitle("Birth")
     }
-    //#now should modify for showing message as done inited finger table. I'll do tomorrow.
     
-    func reply(to destinationDhtAddress: OverlayNetworkAddressAsHexString, description: String, transactionType: TransactionType, claim: (any Claim)?, transactionId: String, node: Node, combinedSealedBox: Data?, attachedFileType: FileType?, personalData: ClaimOnPerson.PersonalData?, peerPublicKey: PublicKey, peerPublicKeyForEncryptionAsData: PublicKeyForEncryption) {
+    func reply(to destinationDhtAddress: OverlayNetworkAddressAsHexString, description: String, transactionType: TransactionType, claim: (any Claim)?, transactionId: TransactionIdentification, node: Node, combinedSealedBox: Data?, attachedFileType: FileType?, personalData: ClaimOnPerson.PersonalData?, peerPublicKeyAsData: PublicKey, peerPublicKeyForEncryptionAsData: PublicKeyForEncryption) {
         Log()
         /*
          Mailの Claim や内容によりmailBody内容を切り替える in replyBody
          */
-        let peerSigner = Signer(publicKeyAsData: peerPublicKey, makerDhtAddressAsHexString: destinationDhtAddress, publicKeyForEncryptionAsData: peerPublicKeyForEncryptionAsData)
-        if let personalDataAsDictionary = personalData {
+        let peerSigner = Signer(publicKeyAsData: peerPublicKeyAsData, makerDhtAddressAsHexString: destinationDhtAddress, publicKeyForEncryptionAsData: peerPublicKeyForEncryptionAsData)
+//        if let personalDataAsDictionary = personalData {
             transactionType.reply(to: destinationDhtAddress, claim: claim, description: description, node: node, combinedSealedBox: combinedSealedBox, attachedFileType: attachedFileType, personalData: personalData, book: node.book, peerSigner: peerSigner)
-        }
+//        }
     }
 
     /*
@@ -357,8 +365,8 @@ struct Birth: View {
             /*
              Send .findTaker Command to BabySitter node.  Optional("hI+onwABLj4eUNRRnltD4k6utv4nkz9tDOt9bluz2ak=")  43char = 240+18 = 258
              */
-            LogEssential(ownNode.signer()?.base64EncodedPrivateKeyForSignatureString)
-            LogEssential(ownNode.signer()?.base64EncodedPublicKeyForSignatureString)
+            Log(ownNode.signer()?.base64EncodedPrivateKeyForSignatureString)
+            Log(ownNode.signer()?.base64EncodedPublicKeyForSignatureString)
             if let signer = ownNode.signer(), let publicKeyAsData = signer.publicKeyAsData, let publicKeyForEncryptionAsData = signer.publicKeyForEncryption?.rawRepresentation {
                 Log()
                 //Build Content
