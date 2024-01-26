@@ -247,7 +247,7 @@ struct Auth: View {
                     Log("own: \(ownNode.signer()?.makerDhtAddressAsHexString ?? "")")
                     Log(ownNode.signer()?.publicKeyForEncryption?.rawRepresentation.base64String ?? "")
                     Log(ownNode.signer()?.privateKeyForEncryption?.rawRepresentation.base64String ?? "")
-                    Log(ownNode.book.currentDifficultyAsNonceLeadingZeroLength)
+//                    Log(ownNode.book.currentDifficultyAsNonceLeadingZeroLength)
                     
                     Log("Node:\(ownNode.description)")
                     self.ownNode = ownNode
