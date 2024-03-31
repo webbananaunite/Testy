@@ -69,37 +69,37 @@ struct TestyApp: App {
             if status == .active {
                 Log("App Enter Foreground.")
                 //carry out as App come into Foreground.
-                /*
-                 Wait for update Model.shared.screens to current.
-                 */
-                Log(Model.shared.semaphore.debugDescription)
-//                Model.shared.semaphore.wait()
-                let waitResult = Model.shared.semaphore.wait(timeout: .now() + 10)  //Seconds   semaphore > 1 ? throw and -1 : wait
-                Log(waitResult)
-                Log(Model.shared.semaphore.debugDescription)
-                Task {
-                    do {
-//                        try await Task.sleep(nanoseconds: 2 * 1024 * 1024 * 1024)
-                        Log(Model.shared.screens.last)
-                        if let screenLast = Model.shared.screens.last {
-                            Log("be in \(screenLast) View")
-                            if screenLast == .menu {
-                                Log()
-                                Task {
-                                    await Notification.notifyToViews("Just Wait Have Join blocks Network.", name: Notification.Name.detectExecuteDoneNotification)
-                                    await detectExecuteDone()
-                                }
-                            }
-                        } else {
-                            Log("be in Auth View")
-//                            Task {
-//                                await Notification.notifyToViews("Please Tap Join blocks Network Button.", name: Notification.Name.pleaseJoinNetworkNotification)
+//                /*
+//                 Wait for update Model.shared.screens to current.
+//                 */
+//                Log(Model.shared.semaphore.debugDescription)
+////                Model.shared.semaphore.wait()
+//                let waitResult = Model.shared.semaphore.wait(timeout: .now() + 10)  //Seconds   semaphore > 1 ? through and -1 : wait
+//                Log(waitResult)
+//                Log(Model.shared.semaphore.debugDescription)
+//                Task {
+//                    do {
+////                        try await Task.sleep(nanoseconds: 2 * 1024 * 1024 * 1024)
+//                        Log(Model.shared.screens.last)
+//                        if let screenLast = Model.shared.screens.last {
+//                            Log("be in \(screenLast) View")
+//                            if screenLast == .menu {
+//                                Log()
+//                                Task {
+//                                    await Notification.notifyToViews("Just Wait Have Join blocks Network.", name: Notification.Name.detectExecuteDoneNotification)
+//                                    await detectExecuteDone()
+//                                }
 //                            }
-                        }
-                    } catch {
-                        Log(error)
-                    }
-                }
+//                        } else {
+//                            Log("be in Auth View")
+////                            Task {
+////                                await Notification.notifyToViews("Please Tap Join blocks Network Button.", name: Notification.Name.pleaseJoinNetworkNotification)
+////                            }
+//                        }
+//                    } catch {
+//                        Log(error)
+//                    }
+//                }
             }
             if status == .inactive {
                 Log("App in Pause.")
@@ -116,47 +116,47 @@ struct TestyApp: App {
 //        }
     }
     
-    func scheduleAsBGApp() {
-        let request = BGAppRefreshTaskRequest(identifier: detectDoneTaskId)
-        request.earliestBeginDate = Date.now
-        do {
-            try BGTaskScheduler.shared.submit(request)
-        } catch {
-            Log("Could not schedule app refresh: \(error)")
-        }
-    }
+//    func scheduleAsBGApp() {
+//        let request = BGAppRefreshTaskRequest(identifier: detectDoneTaskId)
+//        request.earliestBeginDate = Date.now
+//        do {
+//            try BGTaskScheduler.shared.submit(request)
+//        } catch {
+//            Log("Could not schedule app refresh: \(error)")
+//        }
+//    }
     
-    let detectCycleTimeAsNanoSeconds: UInt64 = 5 * 1024 * 1024 * 1024
-    let thresholdRatio: Float = 1.0
-    @State var detectedTimesCounter: UInt8 = 0
-    func detectExecuteDone() async {
-        /*
-         Take cpu ratio for detect done making finger table.
-         */
-        do {
-            let cpuRatio = cpuUsageAsPercent()
-            Log(cpuRatio)
-            if cpuRatio < thresholdRatio {
-                detectedTimesCounter += 1
-                Log(detectedTimesCounter)
-                if detectedTimesCounter >= 3 {
-                    Log()
-                    await Notification.notifyToViews("Have Joined blocks Network.", name: Notification.Name.detectExecuteDoneNotification)
-                    return
-                }
-            } else {
-                Log()
-            }
-            /*
-             execute recursively.
-             //#now
-             */
-            try await Task.sleep(nanoseconds: detectCycleTimeAsNanoSeconds)
-            await detectExecuteDone()
-        } catch {
-            Log(error)
-        }
-    }
+//    let detectCycleTimeAsNanoSeconds: UInt64 = 5 * 1024 * 1024 * 1024
+//    let thresholdRatio: Float = 1.0
+//    @State var detectedTimesCounter: UInt8 = 0
+//    func detectExecuteDone() async {
+//        /*
+//         Take cpu ratio for detect done making finger table.
+//         */
+//        do {
+//            let cpuRatio = cpuUsageAsPercent()
+//            Log(cpuRatio)
+//            if cpuRatio < thresholdRatio {
+//                detectedTimesCounter += 1
+//                Log(detectedTimesCounter)
+//                if detectedTimesCounter >= 3 {
+//                    Log()
+//                    await Notification.notifyToViews("Have Joined blocks Network.", name: Notification.Name.detectExecuteDoneNotification)
+//                    return
+//                }
+//            } else {
+//                Log()
+//            }
+//            /*
+//             execute recursively.
+//             //#now
+//             */
+//            try await Task.sleep(nanoseconds: detectCycleTimeAsNanoSeconds)
+//            await detectExecuteDone()
+//        } catch {
+//            Log(error)
+//        }
+//    }
     
 //    public static func notifyToUser(_ description: String, after: TimeInterval = 0.5, repeating: Bool = false) async {
 //        Log()

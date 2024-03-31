@@ -8,6 +8,7 @@
 
 import SwiftUI
 import blocks
+import overlayNetwork
 
 class Model: ObservableObject {
     static let shared = Model()
@@ -32,6 +33,6 @@ class Model: ObservableObject {
     /*
      Property
      */
-    var babysitterNodeIp: String?
+    var babysitterNodeOverlayNetworkAddress: OverlayNetworkAddressAsHexString?
     var semaphore: DispatchSemaphore = DispatchSemaphore(value: 1)
 }

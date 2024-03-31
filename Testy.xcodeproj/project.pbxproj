@@ -22,7 +22,6 @@
 		98563DCB250F6BE4006EB1D1 /* Mail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98563DCA250F6BE4006EB1D1 /* Mail.swift */; };
 		98563DCD250F6BF5006EB1D1 /* MoveIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98563DCC250F6BF5006EB1D1 /* MoveIn.swift */; };
 		98563DCF250F6C02006EB1D1 /* MoveOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98563DCE250F6C02006EB1D1 /* MoveOut.swift */; };
-		985DDC3B269D5DF800097362 /* StreamViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985DDC3A269D5DF800097362 /* StreamViewer.swift */; };
 		9867E6FC2A7A4AA7004B7DBC /* QuadKeyTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9867E6FB2A7A4AA7004B7DBC /* QuadKeyTest.swift */; };
 		9869998F2AD64B740003A403 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9869998E2AD64B740003A403 /* Map.swift */; };
 		986BBE612B145E8C00C058DA /* TestyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986BBE602B145E8C00C058DA /* TestyApp.swift */; };
@@ -61,7 +60,6 @@
 		98563DCA250F6BE4006EB1D1 /* Mail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mail.swift; sourceTree = "<group>"; };
 		98563DCC250F6BF5006EB1D1 /* MoveIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveIn.swift; sourceTree = "<group>"; };
 		98563DCE250F6C02006EB1D1 /* MoveOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveOut.swift; sourceTree = "<group>"; };
-		985DDC3A269D5DF800097362 /* StreamViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamViewer.swift; sourceTree = "<group>"; };
 		9867E6FB2A7A4AA7004B7DBC /* QuadKeyTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadKeyTest.swift; sourceTree = "<group>"; };
 		9869998E2AD64B740003A403 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		986BBE602B145E8C00C058DA /* TestyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestyApp.swift; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 				9839FE4E25108B6600010C83 /* Pin.swift */,
 				9839FE50251092AC00010C83 /* Information.swift */,
 				9839FE522510BCD300010C83 /* MailToTaker.swift */,
-				985DDC3A269D5DF800097362 /* StreamViewer.swift */,
 				9869998E2AD64B740003A403 /* Map.swift */,
 				986BBE602B145E8C00C058DA /* TestyApp.swift */,
 			);
@@ -300,7 +297,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				98563DCB250F6BE4006EB1D1 /* Mail.swift in Sources */,
-				985DDC3B269D5DF800097362 /* StreamViewer.swift in Sources */,
 				98563DCD250F6BF5006EB1D1 /* MoveIn.swift in Sources */,
 				986BBE612B145E8C00C058DA /* TestyApp.swift in Sources */,
 				98776EDA2B4F951E00C9B58F /* Notification.swift in Sources */,
@@ -503,7 +499,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_ENTITLEMENTS = Testy/Testy.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "0.1 Alpha";
+				CURRENT_PROJECT_VERSION = "0.2 Beta";
 				DEVELOPMENT_TEAM = 8GS35C2LU7;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../blocks";
 				INFOPLIST_FILE = Testy/Info.plist;
@@ -513,7 +509,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = "0.1 Alpha";
+				MARKETING_VERSION = "0.2 Beta";
 				OTHER_LDFLAGS = (
 					"-l",
 					resolv,
@@ -535,7 +531,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_ENTITLEMENTS = Testy/Testy.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "0.1 Alpha";
+				CURRENT_PROJECT_VERSION = "0.2 Beta";
 				DEVELOPMENT_TEAM = 8GS35C2LU7;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../blocks";
 				INFOPLIST_FILE = Testy/Info.plist;
@@ -545,7 +541,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = "0.1 Alpha";
+				MARKETING_VERSION = "0.2 Beta";
 				OTHER_LDFLAGS = (
 					"-l",
 					resolv,

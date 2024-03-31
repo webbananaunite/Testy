@@ -347,9 +347,7 @@ struct Birth: View {
          Mailの Claim や内容によりmailBody内容を切り替える in replyBody
          */
         let peerSigner = Signer(publicKeyAsData: peerPublicKeyAsData, makerDhtAddressAsHexString: destinationDhtAddress, publicKeyForEncryptionAsData: peerPublicKeyForEncryptionAsData)
-//        if let personalDataAsDictionary = personalData {
-            transactionType.reply(to: destinationDhtAddress, claim: claim, description: description, node: node, combinedSealedBox: combinedSealedBox, attachedFileType: attachedFileType, personalData: personalData, book: node.book, peerSigner: peerSigner)
-//        }
+        transactionType.reply(to: destinationDhtAddress, claim: claim, description: description, node: node, combinedSealedBox: combinedSealedBox, attachedFileType: attachedFileType, personalData: personalData, book: node.book, peerSigner: peerSigner)
     }
 
     /*

@@ -22,7 +22,52 @@ final class DataArithmetic: XCTestCase {
     func testHaveBetween() throws {
         Log()
         //        return have(node, between: toAddress, intervalType: .includeExclude)
+/*
+        17:59:18 Node.swift initFingerTable(i:babysitterNode:token:) l.1395 finger- from: 752125ba784d53149767fcc83d21c543e81937b4744d7ea7e9dd535ea60f341be1ca0a4faeff001ff42e4c497f98cdd1f401cd703898ba37d1ec6ec79e3930de
+        17:59:18 Node.swift initFingerTable(i:babysitterNode:token:) l.1396 finger- to: 988637f394e5c291fb7448a9e53bfc5f5fba73feb9ea57703d77b046ed20bab7a0d9f6b41467376ee0dfd25b48cd9a04ed81f0eb197dcfd6ef2532cf84e0f71c
+        17:59:18 Node.swift initFingerTable(i:babysitterNode:token:) l.1397 finger- target: 752127ba784d53149767fcc83d21c543e81937b4744d7ea7e9dd535ea60f341be1ca0a4faeff001ff42e4c497f98cdd1f401cd703898ba37d1ec6ec79e3930de
+        if self.have(fingers[i].start, between: node)
+ */
         if true {
+            if let from = "752125ba784d53149767fcc83d21c543e81937b4744d7ea7e9dd535ea60f341be1ca0a4faeff001ff42e4c497f98cdd1f401cd703898ba37d1ec6ec79e3930de".data(using: .hexadecimal),
+                let to = "988637f394e5c291fb7448a9e53bfc5f5fba73feb9ea57703d77b046ed20bab7a0d9f6b41467376ee0dfd25b48cd9a04ed81f0eb197dcfd6ef2532cf84e0f71c".data(using: .hexadecimal),
+                let target = "752127ba784d53149767fcc83d21c543e81937b4744d7ea7e9dd535ea60f341be1ca0a4faeff001ff42e4c497f98cdd1f401cd703898ba37d1ec6ec79e3930de".data(using: .hexadecimal) {
+                Log()
+                let lowNode = Node(binaryAddress: from)
+                let upNode = Node(binaryAddress: to)
+                let targetNode = Node(binaryAddress: target)
+                let result = lowNode.have(targetNode, between: upNode, intervalType: .includeExclude)
+                XCTAssertEqual(result, true)
+            }
+        }
+
+        
+        if false {
+            /*
+             Data.Modulo.subtract(exponent: 0)
+             public static var Modulo: Data = Data(repeating: 0, count: Int(ModuloAsExponentOf2 / 8)) + Data(repeating: 1, count: 1)
+             public static var ModuloAsExponentOf2: UInt = 512
+
+             ・little endien
+             {64個＋１}バイト
+             000000000000000000000000000000000000000000000000000000000000 0000 1
+             {最下位ビット}
+                                                                                                                                                    {最上位ビット}
+             0x00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 01
+             ↓ subtract()
+             000001 - 1 = 010000 - 1 = 00ffff = to little endien => ffff00
+             
+             ↓
+             ffffffffffffffffffff ffffffffffffffffffff ffffffffffffffffffff ffffffffffffffffffff ffffffffffffffffffff ffffffffffffffffffff ffffffff 00
+
+             */
+            let estimatedResult = "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00".data(using: .hexadecimal)
+            Dump(estimatedResult)
+            let result = Data.Modulo.subtract(exponent: 0)
+            Dump(result)//ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff 00
+            XCTAssertEqual(result, estimatedResult)
+        }
+        if false {
             if let lower = "f87f3ce797b4fcdd28b33987751f821f251b61b7f16b31dbf38888e560a2ec0c1492fc41332ce86b330cc98cb2ac8bdcf482c61703ecfdcd58d7b94f2ae29876".data(using: .hexadecimal),
                 let upper = "f87f3ce797b4fcdd28b33987751f821f251b61b7f16b31dbf38888e560a2ec0c1492fc41332ce86b330cc98cb2ac8bdcf482c61703ecfdcd58d7b94f2ae29876".data(using: .hexadecimal),
                 let target = "77851f003564c2776b48fa3876a62a0c1f20f22b81e4483c6bed0ff94e5fa02f0410486e2fc70ec7d10a3e4ca7b9ce46bf2e4ff729811b650422a294193a38dc".data(using: .hexadecimal) {

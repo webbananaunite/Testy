@@ -222,14 +222,28 @@ struct Auth: View {
                         }
                         return
                     }
-
+                    
+                    guard let signalingServerAddress = Dht.getSignalingServer() else {
+                        Log("Signaling Server illegal.")
+                        return
+                    }
+                    Log(signalingServerAddress)
+                    /*
+                     Deploy Socket for Communicate with Signaling Server.
+                     */
+                    let socket = Socket()
+                    let (socketHandle, sourceAddress, connectionSucceeded) = socket.deploySocketForConnect(to: signalingServerAddress, source: nil)
+                    socket.addSocketReferences(socketFd: socketHandle, overlayNetworkAddress: nil, ipAndPort: signalingServerAddress, addressSpaceType: .public, peerType: .signalingServer)
+                    Log()
                     /*
                      library()した dhtAddresshexstring, binaryaddress, 情報をrestoreする
                         ip, portはその都度検出したものに書き換える
                      */
-                    guard let ownNode = Node(ip: ip, port: Node.myPort, premiumCommand: blocks.Command.other) else {
+                    guard let ownIpAddress = IpaddressV4(sourceAddress.ip), let ownNode = Node(ownNode: ownIpAddress, port: sourceAddress.port, premiumCommand: blocks.Command.other) else {
                         return
                     }
+                    ownNode.signalingServerAddress = signalingServerAddress
+                    ownNode.socketHandle = socketHandle
                     if ownNode.restore() {
                         Log("Restored Node Information.")
                     } else {
@@ -247,37 +261,56 @@ struct Auth: View {
                     Log("own: \(ownNode.signer()?.makerDhtAddressAsHexString ?? "")")
                     Log(ownNode.signer()?.publicKeyForEncryption?.rawRepresentation.base64String ?? "")
                     Log(ownNode.signer()?.privateKeyForEncryption?.rawRepresentation.base64String ?? "")
-//                    Log(ownNode.book.currentDifficultyAsNonceLeadingZeroLength)
-                    
-                    Log("Node:\(ownNode.description)")
                     self.ownNode = ownNode
                     Task { @MainActor in
                         self.model.ownNode = ownNode
                     }
-                    
+                    Log(ownNode.dhtAddressAsHexString)
                     /*
-                     Open ports
-                        Listenning port
+                     Communication with Using POSIX BSD Sockets.
                      */
-                    #if NetworkFramework
+                    let rawbuf: UnsafeMutableRawBufferPointer = UnsafeMutableRawBufferPointer.allocate(byteCount: Socket.MTU, alignment: MemoryLayout<CChar>.alignment)
                     /*
-                     Use iOS Network Framework
+                     Communicate with BSD Sockets for NAT Traversal.
                      
-                     #NotInUse
+                     [Node]
+                     Create Sockets Commucate with Signaling Server / Peer Node.
+                     ↓
+                     bind *bound same port number with Signaling Server / Peer Node.
+                     ↓
+                     connect *async / not wait done
+                     ↓
+                     do in other thread
+                        ↓
+                        ( while )
+                            Leave out for failed connection.
+                            ↓
+                            select
+                            ↓
+                            recv / send data
+                            ↓
+                            Dequeue in command queue
+                            ↓
+                            Rearrange sockets for public ip / private ip for peer node
+                                Bound same port number with Signaling Server / Peer Node.
+                            ↓
+                            Do NAT Traversal Process with Signaling Server / Peer Node.
+                            ↓
+                            Handshaked with Peer Node in Local Network inner NAT Router.
+                            ↓
+                            Send Command to Peer Node
+                            ↓
+                            wait 0.5s
                      */
-                    #else   //POSIX Socket
-                    /*
-                     Use POSIX BSD Socket
-                     */
-                    let rawbuf: UnsafeMutableRawBufferPointer = UnsafeMutableRawBufferPointer.allocate(byteCount: Stream.MTU, alignment: MemoryLayout<CChar>.alignment)
-                    
-                    let acceptableStreaming = AcceptStreamingBlocks() //Listenning port
-                    acceptableStreaming.start(port: ownNode.port, tls: false, rawBufferPointer: rawbuf) {
+                    socket.start(startMode: .registerMeAndIdling, tls: false, rawBufferPointer: rawbuf, node: ownNode, peerSocketHandles: [.signalingServer: [(.public, socketHandle, connectionSucceeded, false)]], inThread: true) {
                         sentDataNodeIp, acceptedStringlength in
+                        /*
+                         Received Data on Listening Bound Port.
+                         */
                         Log(sentDataNodeIp as Any)
                         Log(acceptedStringlength)
                         Log(rawbuf) //UnsafeMutableRawBufferPointer(start: 0x000000014980be00, count: 1024)
-                        guard acceptedStringlength > 0, let sentDataNodeIp = sentDataNodeIp else {
+                        guard acceptedStringlength > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
                             return
                         }
                         /*
@@ -287,19 +320,40 @@ struct Auth: View {
                         Log(acceptedString)
                         
                         /*
-                         コマンド判定
+                         Detect Command
                          */
                         DispatchQueue.main.async {
-                            ownNode.received(from: sentDataNodeIp, data: acceptedString)
+                            //Translate sentDataNodeIp to overlayNetworkAddress
+                            guard let overlayNetworkAddress = socket.findOverlayNetworkAddress(ip: sentDataNodeIp, node: ownNode) else {
+                                LogEssential("Invalid Received IP Address (Not Signaling yet): \(sentDataNodeIp)")
+                                return
+                            }
+                            LogEssential(overlayNetworkAddress)
+                            ownNode.received(from: overlayNetworkAddress, data: acceptedString)
                         }
                     }
-                    #endif
 
-                    let babysitterNode = Dht.getBabysitterNode(ownIpAddressString: ipAddress)
-                    self.model.babysitterNodeIp = babysitterNode?.getIp
+                    let babysitterNode = Dht.getBabysitterNode(ownOverlayNetworkAddress: ownNode.dhtAddressAsHexString.toString)
+                    
+                    /*
+                     Test Mode
+                     When Run As Boot Node, Set {RunAsBootNode} as Run Argument / Environment Variable on Edit Scheme on Xcode.
+                     */
+                    let setArgv = ProcessInfo.processInfo.arguments.contains("RunAsBootNode")
+                    let envVar = ProcessInfo.processInfo.environment["RunAsBootNode"] ?? ""
+                    if setArgv || envVar != "" {
+                        Log()
+                        /*
+                         behavior as Boot Node.
+                         */
+                        self.model.babysitterNodeOverlayNetworkAddress = nil
+                    } else {
+                        Log()
+                        self.model.babysitterNodeOverlayNetworkAddress = babysitterNode?.dhtAddressAsHexString
+                    }
                     
                     if ownNode.fingerTableIsArchived() {
-                        Log()
+                        LogEssential()
                         /*
                          Load FingerTable to memory from Device Store.
                          And Done with that.(That's All.)
@@ -316,7 +370,6 @@ struct Auth: View {
                     Log()
                     Task { @MainActor in
                         Log()
-//                        model.semaphore.signal()
                         self.model.screens += [.menu]
                         Log()
                     }
