@@ -20,7 +20,7 @@ func Log(_ object: Any = "", functionName: String = #function, fileName: String 
 }
 
 public func LogEssential(_ object: Any = "", functionName: String = #function, fileName: String = #file, lineNumber: Int = #line) {
-    #if DEBUG
+    #if false
     let className = (fileName as NSString).lastPathComponent
     let formatter = DateFormatter()
     formatter.dateFormat = "HH:mm:ss"

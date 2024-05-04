@@ -215,60 +215,10 @@ struct Auth: View {
                      MoveIn
                      MoveOut
                      */
-                    guard let ipAddress = IpaddressV4.getIFAddresses().first, let ip = IpaddressV4(ipAddressString: ipAddress) else {
-                        /* Apear modal dialog */
-                        Task { @MainActor in
-                            self.model.networkUnavailable = true
-                        }
-                        return
-                    }
-                    
-                    guard let signalingServerAddress = Dht.getSignalingServer() else {
-                        Log("Signaling Server illegal.")
-                        return
-                    }
-                    Log(signalingServerAddress)
-                    /*
-                     Deploy Socket for Communicate with Signaling Server.
-                     */
-                    let socket = Socket()
-                    let (socketHandle, sourceAddress, connectionSucceeded) = socket.deploySocketForConnect(to: signalingServerAddress, source: nil)
-                    socket.addSocketReferences(socketFd: socketHandle, overlayNetworkAddress: nil, ipAndPort: signalingServerAddress, addressSpaceType: .public, peerType: .signalingServer)
-                    Log()
-                    /*
-                     library()した dhtAddresshexstring, binaryaddress, 情報をrestoreする
-                        ip, portはその都度検出したものに書き換える
-                     */
-                    guard let ownIpAddress = IpaddressV4(sourceAddress.ip), let ownNode = Node(ownNode: ownIpAddress, port: sourceAddress.port, premiumCommand: blocks.Command.other) else {
-                        return
-                    }
-                    ownNode.signalingServerAddress = signalingServerAddress
-                    ownNode.socketHandle = socketHandle
-                    if ownNode.restore() {
-                        Log("Restored Node Information.")
-                    } else {
-                        Log("Can NOT Restore Node Information.")
-                    }
-                    
-                    /*
-                     Node#finger tableも復元したものを model.nodeに格納する
-                     */
-                    /*
-                     Arranged Node Information
-                     */
-                    Log(ownNode.signer()?.publicKeyForSignature?.rawRepresentation.base64String ?? "")
-                    Log(ownNode.signer()?.privateKeyForSignature?.rawRepresentation.base64String ?? "")
-                    Log("own: \(ownNode.signer()?.makerDhtAddressAsHexString ?? "")")
-                    Log(ownNode.signer()?.publicKeyForEncryption?.rawRepresentation.base64String ?? "")
-                    Log(ownNode.signer()?.privateKeyForEncryption?.rawRepresentation.base64String ?? "")
-                    self.ownNode = ownNode
-                    Task { @MainActor in
-                        self.model.ownNode = ownNode
-                    }
-                    Log(ownNode.dhtAddressAsHexString)
                     /*
                      Communication with Using POSIX BSD Sockets.
                      */
+                    let socket = Socket()
                     let rawbuf: UnsafeMutableRawBufferPointer = UnsafeMutableRawBufferPointer.allocate(byteCount: Socket.MTU, alignment: MemoryLayout<CChar>.alignment)
                     /*
                      Communicate with BSD Sockets for NAT Traversal.
@@ -302,7 +252,22 @@ struct Auth: View {
                             ↓
                             wait 0.5s
                      */
-                    socket.start(startMode: .registerMeAndIdling, tls: false, rawBufferPointer: rawbuf, node: ownNode, peerSocketHandles: [.signalingServer: [(.public, socketHandle, connectionSucceeded, false)]], inThread: true) {
+                    guard let ownNode = Node(ownNode: IpaddressV4.null, port: 0, premiumCommand: blocks.Command.other) else {
+                        return
+                    }
+                    socket.start(startMode: .registerMeAndIdling, tls: false, rawBufferPointer: rawbuf, node: ownNode, inThread: true, notifyOwnAddress: {
+                        ownAddress in
+                        /*
+                         Done Making Socket
+                         */
+                        Log(ownAddress as Any)
+                        Log()
+                        guard let sourceAddress = ownAddress else {
+                            Log()
+                            return
+                        }
+                        actionsAfterMadeSocket()
+                    }) {
                         sentDataNodeIp, acceptedStringlength in
                         /*
                          Received Data on Listening Bound Port.
@@ -324,58 +289,93 @@ struct Auth: View {
                          */
                         DispatchQueue.main.async {
                             //Translate sentDataNodeIp to overlayNetworkAddress
-                            guard let overlayNetworkAddress = socket.findOverlayNetworkAddress(ip: sentDataNodeIp, node: ownNode) else {
-                                LogEssential("Invalid Received IP Address (Not Signaling yet): \(sentDataNodeIp)")
+                            guard let ownNode = self.ownNode, let overlayNetworkAddress = socket.findOverlayNetworkAddress(ip: sentDataNodeIp, node: ownNode) else {
+                                Log("Invalid Received IP Address (Not Signaling yet): \(sentDataNodeIp)")
                                 return
                             }
-                            LogEssential(overlayNetworkAddress)
+                            Log(overlayNetworkAddress)
                             ownNode.received(from: overlayNetworkAddress, data: acceptedString)
                         }
                     }
-
-                    let babysitterNode = Dht.getBabysitterNode(ownOverlayNetworkAddress: ownNode.dhtAddressAsHexString.toString)
                     
-                    /*
-                     Test Mode
-                     When Run As Boot Node, Set {RunAsBootNode} as Run Argument / Environment Variable on Edit Scheme on Xcode.
-                     */
-                    let setArgv = ProcessInfo.processInfo.arguments.contains("RunAsBootNode")
-                    let envVar = ProcessInfo.processInfo.environment["RunAsBootNode"] ?? ""
-                    if setArgv || envVar != "" {
+                    func actionsAfterMadeSocket() {
                         Log()
                         /*
-                         behavior as Boot Node.
+                         library()した dhtAddresshexstring, binaryaddress, 情報をrestoreする
+                            ip, portはその都度検出したものに書き換える
                          */
-                        self.model.babysitterNodeOverlayNetworkAddress = nil
-                    } else {
-                        Log()
-                        self.model.babysitterNodeOverlayNetworkAddress = babysitterNode?.dhtAddressAsHexString
-                    }
-                    
-                    if ownNode.fingerTableIsArchived() {
-                        LogEssential()
+                        if ownNode.restore() {
+                            Log("Restored Node Information.")
+                        } else {
+                            Log("Can NOT Restore Node Information.")
+                        }
+                        
                         /*
-                         Load FingerTable to memory from Device Store.
-                         And Done with that.(That's All.)
+                         Node#finger tableも復元したものを model.nodeに格納する
                          */
-                        ownNode.deployFingerTableToMemory()
-                        ownNode.printArchivedFingerTable()
+                        /*
+                         Arranged Node Information
+                         */
+                        Log(ownNode.signer()?.publicKeyForSignature?.rawRepresentation.base64String ?? "")
+                        Log(ownNode.signer()?.privateKeyForSignature?.rawRepresentation.base64String ?? "")
+                        Log("own: \(ownNode.signer()?.makerDhtAddressAsHexString ?? "")")
+                        Log(ownNode.signer()?.publicKeyForEncryption?.rawRepresentation.base64String ?? "")
+                        Log(ownNode.signer()?.privateKeyForEncryption?.rawRepresentation.base64String ?? "")
                         self.ownNode = ownNode
+                        Log()
                         Task { @MainActor in
                             self.model.ownNode = ownNode
                         }
-                    } else {
-                        ownNode.join(babysitterNode: babysitterNode)    //babysitterNode is nil if bootnode
-                    }
-                    Log()
-                    Task { @MainActor in
+                        Log(ownNode.dhtAddressAsHexString)
+                        Log(ownNode.ipAndPortString as Any)
+
+                        guard let ownNode = self.ownNode else {
+                            Log()
+                            return
+                        }
+                        let babysitterNode = Dht.getBabysitterNode(ownOverlayNetworkAddress: ownNode.dhtAddressAsHexString.toString)
+                        /*
+                         Test Mode
+                         When Run As Boot Node, Set {RunAsBootNode} as Run Argument / Environment Variable on Edit Scheme on Xcode.
+                         */
+                        let setArgv = ProcessInfo.processInfo.arguments.contains("RunAsBootNode")
+                        let envVar = ProcessInfo.processInfo.environment["RunAsBootNode"] ?? ""
+                        if setArgv || envVar != "" {
+                            Log()
+                            /*
+                             behavior as Boot Node.
+                             */
+                            self.model.babysitterNodeOverlayNetworkAddress = nil
+                        } else {
+                            Log()
+                            self.model.babysitterNodeOverlayNetworkAddress = babysitterNode?.dhtAddressAsHexString
+                        }
+                        
+                        if ownNode.fingerTableIsArchived() {
+                            Log()
+                            /*
+                             Load FingerTable to memory from Device Store.
+                             And Done with that.(That's All.)
+                             */
+                            ownNode.deployFingerTableToMemory()
+                            ownNode.printArchivedFingerTable()
+                            self.ownNode = ownNode
+                            Task { @MainActor in
+                                self.model.ownNode = ownNode
+                            }
+                        } else {
+                            ownNode.join(babysitterNode: babysitterNode)    //babysitterNode is nil if bootnode
+                        }
                         Log()
-                        self.model.screens += [.menu]
-                        Log()
+                        Task { @MainActor in
+                            Log()
+                            self.model.screens += [.menu]
+                            Log()
+                        }
+                        Log(model.semaphore.debugDescription)
+                        model.semaphore.signal()    //semaphore +1
+                        Log(model.semaphore.debugDescription)
                     }
-                    Log(model.semaphore.debugDescription)
-                    model.semaphore.signal()    //semaphore +1
-                    Log(model.semaphore.debugDescription)
                 } else {
                     let message = error?.localizedDescription ?? "Auth Failed"
                     Log(message)
