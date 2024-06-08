@@ -272,7 +272,7 @@ struct Auth: View {
                         /*
                          Received Data on Listening Bound Port.
                          */
-                        Log(sentDataNodeIp as Any)
+                        LogEssential(sentDataNodeIp as Any)
                         Log(acceptedStringlength)
                         Log(rawbuf) //UnsafeMutableRawBufferPointer(start: 0x000000014980be00, count: 1024)
                         guard acceptedStringlength > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
@@ -282,7 +282,7 @@ struct Auth: View {
                          Transform [CChar] to String
                          */
                         let acceptedString = rawbuf.toString(byteLength: acceptedStringlength)
-                        Log(acceptedString)
+                        LogEssential(acceptedString)
                         
                         /*
                          Detect Command
