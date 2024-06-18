@@ -268,20 +268,25 @@ struct Auth: View {
                         }
                         actionsAfterMadeSocket()
                     }) {
-                        sentDataNodeIp, acceptedStringlength in
+//                        sentDataNodeIp, acceptedStringlength in
+                        sentDataNodeIp, dataRange in
                         /*
                          Received Data on Listening Bound Port.
                          */
-                        LogEssential(sentDataNodeIp as Any)
-                        Log(acceptedStringlength)
+                        Log(sentDataNodeIp as Any)
+                        Log(dataRange.count)
                         Log(rawbuf) //UnsafeMutableRawBufferPointer(start: 0x000000014980be00, count: 1024)
-                        guard acceptedStringlength > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
+//                        guard acceptedStringlength > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
+//                            return
+//                        }
+                        guard dataRange.count > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
                             return
                         }
                         /*
                          Transform [CChar] to String
                          */
-                        let acceptedString = rawbuf.toString(byteLength: acceptedStringlength)
+//                        let acceptedString = rawbuf.toString(byteLength: acceptedStringlength)
+                        let acceptedString = rawbuf.toString(byteRange: dataRange)
                         LogEssential(acceptedString)
                         
                         /*
@@ -305,9 +310,9 @@ struct Auth: View {
                             ip, portはその都度検出したものに書き換える
                          */
                         if ownNode.restore() {
-                            Log("Restored Node Information.")
+                            LogEssential("Restored Node Information.")
                         } else {
-                            Log("Can NOT Restore Node Information.")
+                            LogEssential("Can NOT Restore Node Information.")
                         }
                         
                         /*
@@ -326,7 +331,7 @@ struct Auth: View {
                         Task { @MainActor in
                             self.model.ownNode = ownNode
                         }
-                        Log(ownNode.dhtAddressAsHexString)
+                        LogEssential(ownNode.dhtAddressAsHexString)
                         Log(ownNode.ipAndPortString as Any)
 
                         guard let ownNode = self.ownNode else {
