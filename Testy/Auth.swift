@@ -268,7 +268,6 @@ struct Auth: View {
                         }
                         actionsAfterMadeSocket()
                     }) {
-//                        sentDataNodeIp, acceptedStringlength in
                         sentDataNodeIp, dataRange in
                         /*
                          Received Data on Listening Bound Port.
@@ -276,16 +275,12 @@ struct Auth: View {
                         Log(sentDataNodeIp as Any)
                         Log(dataRange.count)
                         Log(rawbuf) //UnsafeMutableRawBufferPointer(start: 0x000000014980be00, count: 1024)
-//                        guard acceptedStringlength > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
-//                            return
-//                        }
                         guard dataRange.count > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
                             return
                         }
                         /*
                          Transform [CChar] to String
                          */
-//                        let acceptedString = rawbuf.toString(byteLength: acceptedStringlength)
                         let acceptedString = rawbuf.toString(byteRange: dataRange)
                         LogEssential(acceptedString)
                         
