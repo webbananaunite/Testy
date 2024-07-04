@@ -363,6 +363,13 @@ struct Auth: View {
                             Task { @MainActor in
                                 self.model.ownNode = ownNode
                             }
+                            /*
+                             if Not Behavior as Boot Node,
+                             Do Stabilize Finger Table.
+                             */
+                            if self.model.babysitterNodeOverlayNetworkAddress != nil {
+                                ownNode.stabilize()
+                            }
                         } else {
                             ownNode.join(babysitterNode: babysitterNode)    //babysitterNode is nil if bootnode
                         }
