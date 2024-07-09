@@ -52,7 +52,7 @@ struct Auth: View {
     var body: some View {
         NavigationStack(path: $model.screens) {
             VStack {
-                Text("Welcome")
+                Text(model.overlayNetworkStatus ?? "Welcome")
                     .padding(.top, 50)
                 Spacer()
                 /*
@@ -119,23 +119,26 @@ struct Auth: View {
                 Log()
             }
         }
-//        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name.pleaseJoinNetworkNotification)) { data in
-//            Log("onReceive")
-//            var statusString = ""
-//            if let content = (data.object as? UNNotificationContent){
-//                Log("title:\(content.title), subtitle:\(content.subtitle)")
-//                statusString = content.title
-//            }
-//            if let description = data.userInfo?["description"] as? String, description != "" {
-//                Log(description)
-////                statusString = description
-//            }
-//            if statusString != "" {
-//                Task {
-//                    await Notification.notifyToUser(statusString)
-//                }
-//            }
-//        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name.detectExecuteDoneNotification)) { data in
+            Log("onReceive")
+            Log(data.object)
+            Log(data.userInfo)
+            var statusString = ""
+            if let content = (data.object as? UNNotificationContent){
+                Log("title:\(content.title), subtitle:\(content.subtitle)")
+                statusString = content.title
+            }
+            if let description = data.userInfo?["description"] as? String, description != "" {
+                Log(description)
+//                statusString = description
+            }
+            if statusString != "" {
+                Task {
+                    model.overlayNetworkStatus = statusString
+                    await Notification.notifyToUser(statusString)
+                }
+            }
+        }
     }
     
     private func checkIn() -> Void {
@@ -260,10 +263,16 @@ struct Auth: View {
                         /*
                          Done Making Socket
                          */
-                        Log(ownAddress as Any)
+                        LogCommunicate(ownAddress as Any)
                         Log()
-                        guard let sourceAddress = ownAddress else {
+                        guard let _ = ownAddress else {
                             Log()
+                            /*
+                             Signaling Server UnAvailable.
+                             */
+                            Task { @MainActor in
+                                await Notification.notifyToViews("Signaling Server UnAvailable.", name: Notification.Name.detectExecuteDoneNotification)
+                            }
                             return
                         }
                         actionsAfterMadeSocket()
