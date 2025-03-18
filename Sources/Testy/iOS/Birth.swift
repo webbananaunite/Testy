@@ -6,6 +6,7 @@
 //  Copyright © 2020 WEB BANANA UNITE Tokyo-Yokohama LPC. All rights reserved.
 //
 
+#if os(macOS) || os(iOS)
 import SwiftUI
 import blocks
 import overlayNetwork
@@ -441,3 +442,4 @@ struct Birth_Previews: PreviewProvider {
         Birth(takerAddress: "").environmentObject(Model.shared)
     }
 }
+#endif

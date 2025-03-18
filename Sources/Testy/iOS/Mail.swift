@@ -6,6 +6,7 @@
 //  Copyright © 2020 WEB BANANA UNITE Tokyo-Yokohama LPC. All rights reserved.
 //
 
+#if os(macOS) || os(iOS)
 import SwiftUI
 import overlayNetwork
 import blocks
@@ -197,3 +198,4 @@ struct Mail_Previews: PreviewProvider {
         Mail()
     }
 }
+#endif

@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-import overlayNetworkObjc
+//import overlayNetworkObjc
 import BackgroundTasks
 
 class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
@@ -21,6 +21,7 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
 
 @main
 struct TestyApp: App {
+//struct TestyApp: View {
     /*
      Enable the line, if Use AppDelegate System.
      
@@ -110,3 +111,20 @@ struct TestyApp: App {
         }
     }
 }
+
+//func main(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>) -> Int32 {
+//    return UIApplicationMain(argc, argv, nil, "TestyApp")
+//}
+//UIApplicationMain(
+//    CommandLine.argc, CommandLine.unsafeArgv, nil,
+//        "TestyApp"
+//)
+//class AppDelegate: NSObject, UIApplicationDelegate {
+//    
+//    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+//        //Config your application here
+////        TestyApp()
+//        return true
+//    }
+//
+//}

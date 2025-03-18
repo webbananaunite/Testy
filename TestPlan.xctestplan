@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "76D15026-DDF7-45ED-A39D-03BF359E8816",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/blocks",
+        "identifier" : "blocksTests",
+        "name" : "blocksTests"
+      }
+    }
+  ],
+  "version" : 1
+}

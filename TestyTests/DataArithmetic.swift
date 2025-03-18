@@ -265,7 +265,7 @@ final class DataArithmetic: XCTestCase {
          2^512
          = 0b10{512}
          */
-        if true {
+        if false {
             let subtractend = Data(repeating: 0, count: 512) + Data(repeating: 1, count: 1)
 
             print("subtractend:")
@@ -283,13 +283,17 @@ final class DataArithmetic: XCTestCase {
         if false {
             let subtractend = Data(repeating: 1, count: 1) + Data(repeating: 2, count: 1) + Data(repeating: 3, count: 1) + Data(repeating: 4, count: 1)
             print("subtractend:")
-            Dump(subtractend)
-            let subtracted = subtractend.subtract(exponent: 512) //subtracter: 2^512
+            Dump(subtractend)   //01020304
+            let subtracted = subtractend.subtract(exponent: 512) //subtracter: 2^512    2^512 = 0{0が512個}...1
             print("subtracted:")
             Dump(subtracted)
+            //LittleEndian
+            //fffdfcfb ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff 00
             var expectedSubtract = Data(repeating: 255, count: 1) + Data(repeating: 253, count: 1) + Data(repeating: 252, count: 1) + Data(repeating: 251, count: 1) + Data(repeating: 255, count: 60)
             expectedSubtract += Data(repeating: 0, count: 1)
             print("expected:")
+            //LittleEndian
+            //fffdfcfb ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff 00
             Dump(expectedSubtract)
             XCTAssertEqual(subtracted, expectedSubtract)
         }
@@ -305,7 +309,7 @@ final class DataArithmetic: XCTestCase {
             Dump(expectedSubtract)
             XCTAssertEqual(subtracted, expectedSubtract)
         }
-        if false {
+        if true {
             let subtractend = Data(repeating: 0, count: 512) + Data(repeating: 1, count: 1)
 
             print("subtractend:")

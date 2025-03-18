@@ -5,7 +5,7 @@
 //  Created by よういち on 2024/01/11.
 //  Copyright © 2024 WEB BANANA UNITE Tokyo-Yokohama LPC. All rights reserved.
 //
-
+#if os(macOS) || os(iOS)
 import Foundation
 import UserNotifications
 
@@ -47,3 +47,4 @@ extension Notification {
         }
     }
 }
+#endif

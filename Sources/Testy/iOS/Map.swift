@@ -6,6 +6,7 @@
 //  Copyright © 2023 WEB BANANA UNITE Tokyo-Yokohama LPC. All rights reserved.
 //
 
+#if os(macOS) || os(iOS)
 import Foundation
 import SwiftUI
 import MapKit
@@ -31,3 +32,4 @@ struct Map: UIViewRepresentable {
         return map
     }
 }
+#endif

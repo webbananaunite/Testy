@@ -6,6 +6,7 @@
 //  Copyright © 2020 WEB BANANA UNITE Tokyo-Yokohama LPC. All rights reserved.
 //
 
+#if os(macOS) || os(iOS)
 import SwiftUI
 import blocks
 
@@ -47,3 +48,4 @@ struct Pin_Previews: PreviewProvider {
         Pin(pin: "", takerAddress: "ABCskldasie8389skldasie8389kadskldasie8389skldasie8389BCskldasie8389skldasie8389kadskldasie8389skldasie83892498")
     }
 }
+#endif

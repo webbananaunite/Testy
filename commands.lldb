@@ -1,0 +1,10 @@
+platform select remote-linux
+platform connect connect://os3-309-44411.vs.sakura.ne.jp:24098
+file ~yoichi/appOutput/Testy/x86_64-swift-linux-musl/debug/TestyOnLinux
+log disable all
+settings set target.sdk-path /Users/yoichi/Library/org.swift.swiftpm/swift-sdks/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-02-a_static-linux-0.0.1.artifactbundle/swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-02-a_static-linux-0.0.1/swift-linux-musl/musl-1.2.5.sdk
+breakpoint set -f Socket.swift -l 2320
+breakpoint set -f Socket.swift -l 958
+break list
+run RunAsBootNode
+thread list

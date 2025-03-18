@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>org.webbanana.Testy</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>testy</string>
+		<string>portNumber</string>
+	</array>
+	<key>KeepAlive</key>
+	<true/>
+    <key>Sockets</key>
+    <dict>
+        <key>Listeners</key>
+        <dict>
+            <key>SockServiceName</key>
+            <string>3478</string>
+            <key>SockType</key>
+            <string>stream</string>
+            <key>SockFamily</key>
+            <string>IPv4</string>
+        </dict>
+    </dict>
+    <key>WorkingDirectory</key>
+    <string>/home/rocky/</string>
+    <key>StandardOutPath</key>
+    <string>/home/rocky/server_log.txt</string>
+    <key>StandardErrorPath</key>
+    <string>/home/rocky/server_log.txt</string>
+    <key>Debug</key>
+    <true/>
+</dict>
+</plist>

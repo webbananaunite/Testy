@@ -6,6 +6,7 @@
 //  Copyright © 2020 WEB BANANA UNITE Tokyo-Yokohama LPC. All rights reserved.
 //
 
+#if os(macOS) || os(iOS)
 import SwiftUI
 import blocks
 import overlayNetwork
@@ -218,3 +219,4 @@ struct Infomation_Previews: PreviewProvider {
         Information(realName: "", realBirth: Date(), realTelephoneNumber: "", takerAddress: "", transactionAsDictionary: [:], peerPublicKeyAsString: nil, transactionId: nil).environmentObject(Model.shared)
     }
 }
+#endif

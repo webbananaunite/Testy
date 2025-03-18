@@ -6,6 +6,7 @@
 //  Copyright © 2020 WEB BANANA UNITE Tokyo-Yokohama LPC. All rights reserved.
 //
 
+#if os(macOS) || os(iOS)
 import SwiftUI
 
 struct MailToTaker: View {
@@ -19,3 +20,4 @@ struct MailToTaker_Previews: PreviewProvider {
         MailToTaker()
     }
 }
+#endif
