@@ -81,7 +81,7 @@ public class Communication {
             /*
              Received Data on Listening Bound Port.
              */
-            Log(sentDataNodeIp as Any)
+            LogEssential(sentDataNodeIp as Any)
             Log(dataRange.count)
             Log(rawbuf) //UnsafeMutableRawBufferPointer(start: 0x000000014980be00, count: 1024)
             guard dataRange.count > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
