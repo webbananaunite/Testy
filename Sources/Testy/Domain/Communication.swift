@@ -81,8 +81,9 @@ public class Communication {
             /*
              Received Data on Listening Bound Port.
              */
-            LogEssential(sentDataNodeIp as Any)
-            Log(dataRange.count)
+            LogCommunicate(sentDataNodeIp as Any)
+            LogCommunicate(dataRange.count)
+            LogCommunicate(dataRange)
             Log(rawbuf) //UnsafeMutableRawBufferPointer(start: 0x000000014980be00, count: 1024)
             guard dataRange.count > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
                 return
@@ -91,7 +92,7 @@ public class Communication {
              Transform [CChar] to String
              */
             let acceptedString = rawbuf.toString(byteRange: dataRange)
-            LogEssential(acceptedString)
+            LogCommunicate(acceptedString)
             
             /*
              Detect Command
@@ -100,10 +101,10 @@ public class Communication {
             DispatchQueue.main.async {
                 //Translate sentDataNodeIp to overlayNetworkAddress
                 guard let overlayNetworkAddress = socket.findOverlayNetworkAddress(ip: sentDataNodeIp, node: ownNode) else {
-                    LogEssential("Invalid Received IP Address (Not Signaling yet): \(sentDataNodeIp)")
+                    LogCommunicate("Invalid Received IP Address (Not Signaling yet): \(sentDataNodeIp)")
                     return
                 }
-                LogEssential(overlayNetworkAddress)
+                LogCommunicate(overlayNetworkAddress)
                 ownNode.received(from: overlayNetworkAddress, data: acceptedString)
             }
 #elseif os(Linux)
@@ -130,9 +131,9 @@ public class Communication {
              ip, portはその都度検出したものに書き換える
              */
             if ownNode.restore() {
-                LogEssential("Restored Node Information.")
+                LogCommunicate("Restored Node Information.")
             } else {
-                LogEssential("Can NOT Restore Node Information.")
+                LogCommunicate("Can NOT Restore Node Information.")
             }
             
             /*
@@ -153,7 +154,7 @@ public class Communication {
                 self.model?.ownNode = ownNode
             }
             #endif
-            LogEssential(ownNode.dhtAddressAsHexString)
+            LogCommunicate(ownNode.dhtAddressAsHexString)
             Log(ownNode.ipAndPortString as Any)
             
             guard let ownNode = self.ownNode else {
@@ -166,7 +167,7 @@ public class Communication {
              Behavior as Boot Node, Set {RunAsBootNode} as Run Argument / Environment Variable on Edit Scheme on Xcode.
              */
             #if os(iOS)
-            if Node.behaviorAsBootNode() {
+            if Node.behaviorAs(nodeType: .RunAsBootNode) {
                 Log()
                 /*
                  behavior as Boot Node.

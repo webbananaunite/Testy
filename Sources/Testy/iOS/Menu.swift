@@ -40,7 +40,8 @@ struct Menu: View {
             
             Button("Birth") {
                 Log()
-                model.ownNode?.printFingerTableEssential()
+//                model.ownNode?.printFingerTableEssential()    //Debug Issue
+                model.ownNode?.printQueueEssential()    //Debug Issue
                 Log(model.ownNode?.fingers.count)
                 self.model.screens += [.birth]
             }
@@ -68,12 +69,14 @@ struct Menu: View {
             .padding(.bottom, 50)
             Button("Mail") {
                 Log()
+                model.ownNode?.printSocketQueueEssential()    //Debug Issue
                 self.model.screens += [.mail]
             }
             .buttonStyle(TYButtonStyle())
             .padding(.bottom, 50)
             Button("MoveIn") {
                 Log()
+                model.ownNode?.printFingerTableEssential()    //Debug Issue
                 self.model.screens += [.movein]
             }
             .buttonStyle(TYButtonStyle())

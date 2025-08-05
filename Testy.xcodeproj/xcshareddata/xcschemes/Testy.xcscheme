@@ -66,6 +66,14 @@
             argument = "RunAsBootNode"
             isEnabled = "NO">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "RunAsSecondNode"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "RunAsThirdNode"
+            isEnabled = "YES">
+         </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
