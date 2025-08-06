@@ -40,7 +40,7 @@ productsSettings = [
     .executable(name: "TestyOnLinux", targets: ["TestyOnLinux"])
 ]
 dependenciesSettings = [
-    .package(url: "https://github.com/webbananaunite/blocks", .upToNextMajor(from: "0.5.0")), //using source code in github
+    .package(url: "https://github.com/webbananaunite/blocks", .upToNextMajor(from: "0.5.2")), //using source code in github
 //    .package(name: "blocks", path: "../blocks"),  //using source code in same device.
 //    .package(url: "https://github.com/apple/swift-crypto.git", .upToNextMajor(from: "3.4.0"))   //using as import Crypto
 ]
