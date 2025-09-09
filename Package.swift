@@ -32,6 +32,7 @@ var dependenciesSettings: [Package.Dependency] = []
 var cSettings: [CSetting] = []
 var swiftSettings: [SwiftSetting] = []
 var linkerSettings: [LinkerSetting] = []
+var targetsSettings: [PackageDescription.Target] = []
 
 /*
  Should be Switch Linux or iOS
@@ -40,7 +41,7 @@ productsSettings = [
     .executable(name: "TestyOnLinux", targets: ["TestyOnLinux"])
 ]
 dependenciesSettings = [
-    .package(url: "https://github.com/webbananaunite/blocks", .upToNextMajor(from: "0.5.2")), //using source code in github
+    .package(url: "https://github.com/webbananaunite/blocks", .upToNextMajor(from: "0.5.3")), //using source code in github
 //    .package(name: "blocks", path: "../blocks"),  //using source code in same device.
 //    .package(url: "https://github.com/apple/swift-crypto.git", .upToNextMajor(from: "3.4.0"))   //using as import Crypto
 ]
@@ -76,6 +77,30 @@ linkerSettings = [
     .linkedLibrary("c++"),
 ]
 #endif
+targetsSettings = [
+    //linux
+    .executableTarget(
+        name: "TestyOnLinux",
+        dependencies: [
+            .product(name: "blocks", package: "blocks"),
+            // .product(name: "Crypto", package: "swift-crypto", condition: .when(platforms: [.linux])),
+        ],
+        path: "Sources/Testy",
+        exclude: ["iOS"],
+//            resources: [.process("DomainService/Hash.metal"), .process("DomainService/Shader.metal")],
+        cSettings: cSettings,
+        swiftSettings: swiftSettings,
+        linkerSettings: linkerSettings
+    ),
+    .testTarget(
+        name: "TestyOnLinuxTests",
+        dependencies: [
+            "TestyOnLinux"
+        ],
+        path: "TestyTests",
+        linkerSettings: linkerSettings
+    ),
+]
 
 /*
  Should be Switch Linux or iOS
@@ -90,31 +115,9 @@ let package = Package(
         .iOS(.v16),
         .watchOS(.v9),
         .tvOS(.v16),
+        .macOS(.v13)
     ],
     products: productsSettings,
     dependencies: dependenciesSettings,
-    targets: [
-        //linux
-        .executableTarget(
-            name: "TestyOnLinux",
-            dependencies: [
-                .product(name: "blocks", package: "blocks"),
-                // .product(name: "Crypto", package: "swift-crypto", condition: .when(platforms: [.linux])),
-            ],
-            path: "Sources/Testy",
-            exclude: ["iOS"],
-//            resources: [.process("DomainService/Hash.metal"), .process("DomainService/Shader.metal")],
-            cSettings: cSettings,
-            swiftSettings: swiftSettings,
-            linkerSettings: linkerSettings
-        ),
-        .testTarget(
-            name: "TestyOnLinuxTests",
-            dependencies: [
-                "TestyOnLinux"
-            ],
-            path: "TestyTests",
-            linkerSettings: linkerSettings
-        ),
-    ]
+    targets: targetsSettings
 )

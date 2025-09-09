@@ -59,7 +59,7 @@ public class Communication {
             /*
              Done Making Socket
              */
-            LogCommunicate(ownAddress as Any)
+            Log(ownAddress as Any)
             Log()
             guard let _ = ownAddress else {
                 Log()
@@ -81,9 +81,9 @@ public class Communication {
             /*
              Received Data on Listening Bound Port.
              */
-            LogCommunicate(sentDataNodeIp as Any)
-            LogCommunicate(dataRange.count)
-            LogCommunicate(dataRange)
+            Log(sentDataNodeIp as Any)
+            Log(dataRange.count)
+            Log(dataRange)
             Log(rawbuf) //UnsafeMutableRawBufferPointer(start: 0x000000014980be00, count: 1024)
             guard dataRange.count > 0, let sentDataNodeIp = sentDataNodeIp else {Log()
                 return
@@ -92,7 +92,7 @@ public class Communication {
              Transform [CChar] to String
              */
             let acceptedString = rawbuf.toString(byteRange: dataRange)
-            LogCommunicate(acceptedString)
+            Log(acceptedString)
             
             /*
              Detect Command
@@ -101,10 +101,10 @@ public class Communication {
             DispatchQueue.main.async {
                 //Translate sentDataNodeIp to overlayNetworkAddress
                 guard let overlayNetworkAddress = socket.findOverlayNetworkAddress(ip: sentDataNodeIp, node: ownNode) else {
-                    LogCommunicate("Invalid Received IP Address (Not Signaling yet): \(sentDataNodeIp)")
+                    Log("Invalid Received IP Address (Not Signaling yet): \(sentDataNodeIp)")
                     return
                 }
-                LogCommunicate(overlayNetworkAddress)
+                Log(overlayNetworkAddress)
                 ownNode.received(from: overlayNetworkAddress, data: acceptedString)
             }
 #elseif os(Linux)
@@ -131,9 +131,9 @@ public class Communication {
              ip, portはその都度検出したものに書き換える
              */
             if ownNode.restore() {
-                LogCommunicate("Restored Node Information.")
+                Log("Restored Node Information.")
             } else {
-                LogCommunicate("Can NOT Restore Node Information.")
+                Log("Can NOT Restore Node Information.")
             }
             
             /*
@@ -154,7 +154,7 @@ public class Communication {
                 self.model?.ownNode = ownNode
             }
             #endif
-            LogCommunicate(ownNode.dhtAddressAsHexString)
+            Log(ownNode.dhtAddressAsHexString)
             Log(ownNode.ipAndPortString as Any)
             
             guard let ownNode = self.ownNode else {
