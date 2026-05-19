@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# ワークフロー全体で Node 24 への移行を先取りして警告を消す
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   test:
     name: Test on ${{ matrix.platform }}
@@ -27,7 +31,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       # 【iOSのみ】Xcode（Swift 6.0を含む環境）を選択
       - name: Select Xcode Version (macOS)
@@ -37,7 +41,7 @@ jobs:
       # 【Linuxのみ】Swift 6.0 ツールチェーンをセットアップ
       - name: Setup Swift (Linux)
         if: matrix.platform == 'Linux'
-        uses: swift-actions/setup-swift@v2
+        uses: swift-actions/setup-swift@v3
         with:
           swift-version: '6.0'
 
