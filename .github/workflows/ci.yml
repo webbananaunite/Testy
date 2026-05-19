@@ -1,0 +1,46 @@
+name: Swift Package Cross-Platform CI (iOS-GUI & Linux-CUI)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Test on ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # 1. iOS (GUI環境・UIKit依存)
+          - platform: iOS
+            os: macos-15
+            run_cmd: "xcodebuild test -scheme \"${{ github.event.repository.name }}\" -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' -quiet"
+            
+          # 2. Linux (CUI環境・デーモン)
+          - platform: Linux
+            os: ubuntu-latest
+            run_cmd: "swift test -v"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 【iOSのみ】Xcode（Swift 6.0を含む環境）を選択
+      - name: Select Xcode Version (macOS)
+        if: matrix.platform == 'iOS'
+        run: sudo xcode-select -s /Applications/Xcode_16.0.app
+
+      # 【Linuxのみ】Swift 6.0 ツールチェーンをセットアップ
+      - name: Setup Swift (Linux)
+        if: matrix.platform == 'Linux'
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
+
+      # マトリックスで定義したそれぞれのテストコマンドを実行
+      - name: Run Tests
+        run: ${{ matrix.run_cmd }}
