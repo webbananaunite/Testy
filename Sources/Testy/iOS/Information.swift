@@ -8,6 +8,7 @@
 
 #if os(macOS) || os(iOS)
 import SwiftUI
+import SharedDesignSystem
 import blocks
 import overlayNetwork
 import CoreLocationUI
@@ -44,7 +45,16 @@ struct Information: View {
          個人情報「住所・氏名・生年月日・電話番号」をTakerにMail
          */
         ZStack {
-            VStack {
+            VStack(spacing: 18) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("個人情報")
+                        .font(.title.bold())
+                    Text("必要情報を入力し、Taker に安全に送信します。")
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .testyGlassCard()
+
                 Form {
                     TextField("氏名", text: $realName)
                         .textContentType(.name)
@@ -108,8 +118,11 @@ struct Information: View {
                         self.checkValue()
                         self.mailToTaker()
                     }
-                    .buttonStyle(TYButtonStyle())
+                    .buttonStyle(TestyGlassButtonStyle())
                 }
+                .textFieldStyle(TestyGlassTextFieldStyle())
+                .scrollContentBackground(.hidden)
+                .background(Color.clear)
                 //allowedContentTypes: [.item] is allowing all file types.
                 .fileImporter(isPresented: $selectingFile, allowedContentTypes: FileType.importable, allowsMultipleSelection: false) {
                     selectedFile in
@@ -134,14 +147,21 @@ struct Information: View {
                     }
                 }
             }
+            .padding(16)
             if let latlong = quadKeyForBornedPlace.latlong {
                 VStack {
                     Map(center: latlong, quadKey: self.quadKeyForBornedPlace)
-                        .edgesIgnoringSafeArea(.all)
+                        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                                .stroke(Color.white.opacity(0.25), lineWidth: 1)
+                        }
+                        .padding(16)
                 }
             }
         }
         .navigationBarTitle("個人情報")
+        .testyScreen()
         .onAppear {
             if let peerPublicKeyAsData = self.peerPublicKeyAsString?.base64DecodedData, let takerAddress = self.takerAddress,
                let peerPublicKeyForEncryptionAsBase64String = transactionAsDictionary?["PublicKeyForEncryption"],

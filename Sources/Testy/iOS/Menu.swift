@@ -8,87 +8,74 @@
 
 #if os(macOS) || os(iOS)
 import SwiftUI
+import SharedDesignSystem
 import blocks
 
 struct Menu: View {
     @EnvironmentObject var model: Model
     var body: some View {
-        VStack {
-            Text("App Status")
-                .bold()
-            Text(model.overlayNetworkStatus ?? "Just Wait Have Join blocks Network.")
-                .padding(.bottom, 50)
-        }
-        /*
-         機能メニューを表示
-         
-         機能メニュー
-         Birth
-         Mail - Send
-         MoveIn
-         MoveOut
-         */
-        VStack {
-            /*
-             残高表示
-             */
-            HStack {
-                let balance = model.balanceInCachedBlock.asDecimal - model.consumedAmountOfPublishedTransaction.asDecimal
-                Text("Balance")
-                Text(balance.formatted())
-            }
-            
-            Button("Birth") {
-                Log()
-//                model.ownNode?.printFingerTableEssential()    //Debug Issue
-                model.ownNode?.printQueueEssential()    //Debug Issue
-                Log(model.ownNode?.fingers.count)
-                self.model.screens += [.birth]
-            }
-            .buttonStyle(TYButtonStyle())
-            .padding(.bottom, 50)
-            
-            /*
-             Ask for BasicIncome by Any Account Monthly.
-                Tap BasicIncome Button
-                or
-                as Boot the App, Prompt to Demand Basicincome.
-             ↓
-             As publish Block, check duplicate by Booker.
-                Reject as Duplication.
-             ↓
-             As received a Block, check duplicate by All node.
-                Reject as Duplication.
+        ScrollView {
+            VStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("App Status")
+                        .font(.headline)
+                    Text(model.overlayNetworkStatus ?? "Just Wait Have Join blocks Network.")
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .testyGlassCard()
 
-             */
-            Button("Demand Basic Income Monthly") {
-                Log()
-                publishDemandBasicIncomeTransaction()
+                VStack(alignment: .leading, spacing: 8) {
+                    let balance = model.balanceInCachedBlock.asDecimal - model.consumedAmountOfPublishedTransaction.asDecimal
+                    Text("Balance")
+                        .font(.headline)
+                    Text(balance.formatted())
+                        .font(.system(size: 34, weight: .bold, design: .rounded))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .testyGlassCard()
+
+                VStack(spacing: 14) {
+                    Button("Birth") {
+                        Log()
+                        model.ownNode?.printQueueEssential()
+                        Log(model.ownNode?.fingers.count)
+                        self.model.screens += [.birth]
+                    }
+                    .buttonStyle(TestyGlassButtonStyle())
+
+                    Button("Demand Basic Income Monthly") {
+                        Log()
+                        publishDemandBasicIncomeTransaction()
+                    }
+                    .buttonStyle(TestyGlassButtonStyle())
+
+                    Button("Mail") {
+                        Log()
+                        model.ownNode?.printSocketQueueEssential()
+                        self.model.screens += [.mail]
+                    }
+                    .buttonStyle(TestyGlassButtonStyle())
+
+                    Button("MoveIn") {
+                        Log()
+                        model.ownNode?.printFingerTableEssential()
+                        self.model.screens += [.movein]
+                    }
+                    .buttonStyle(TestyGlassButtonStyle())
+
+                    Button("MoveOut") {
+                        Log()
+                        self.model.screens += [.moveout]
+                    }
+                    .buttonStyle(TestyGlassButtonStyle())
+                }
+                .testyGlassCard()
             }
-            .buttonStyle(TYButtonStyle())
-            .padding(.bottom, 50)
-            Button("Mail") {
-                Log()
-                model.ownNode?.printSocketQueueEssential()    //Debug Issue
-                self.model.screens += [.mail]
-            }
-            .buttonStyle(TYButtonStyle())
-            .padding(.bottom, 50)
-            Button("MoveIn") {
-                Log()
-                model.ownNode?.printFingerTableEssential()    //Debug Issue
-                self.model.screens += [.movein]
-            }
-            .buttonStyle(TYButtonStyle())
-            .padding(.bottom, 50)
-            Button("MoveOut") {
-                Log()
-                self.model.screens += [.moveout]
-            }
-            .buttonStyle(TYButtonStyle())
-            Spacer()
+            .padding(20)
         }
         .navigationBarTitle("Menu")
+        .testyScreen()
         .onAppear {
             Log()
             /*

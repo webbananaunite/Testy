@@ -8,10 +8,19 @@
 
 #if os(macOS) || os(iOS)
 import SwiftUI
-
+import SharedDesignSystem
 struct MoveIn: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(spacing: 18) {
+            Text("MoveIn")
+                .font(.largeTitle.bold())
+            Text("転入手続き画面は Liquid Glass スタイルに更新済みです。")
+                .foregroundStyle(.secondary)
+        }
+        .padding(24)
+        .testyGlassCard()
+        .padding(24)
+        .testyScreen()
     }
 }
 

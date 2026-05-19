@@ -10,6 +10,7 @@
 import SwiftUI
 import overlayNetwork
 import blocks
+import SharedDesignSystem
 
 struct Mail: View {
     @EnvironmentObject var model: Model
@@ -24,10 +25,15 @@ struct Mail: View {
         /*
          Reveal All Mails on App Screen in Descending Order.
          */
-        VStack {
-            Text("Received Mails")
-                .font(.title)
-                .padding()
+        VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Received Mails")
+                    .font(.title.bold())
+                Text("受信した Mail をガラスカード上で確認できます。")
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .testyGlassCard()
             Form {
                 if let node = model.ownNode {
                     let _ = Log(node.book.blocks.count)
@@ -177,8 +183,13 @@ struct Mail: View {
                 }
             }
             .formStyle(.automatic)
+            .textFieldStyle(TestyGlassTextFieldStyle())
+            .scrollContentBackground(.hidden)
+            .background(Color.clear)
             .padding(EdgeInsets(top: 0, leading: 5, bottom: 50, trailing: 5))
         }
+        .padding(16)
+        .testyScreen()
     }
     
     func reply(to destinationDhtAddress: OverlayNetworkAddressAsHexString, description: String, transactionType: TransactionType, claim: (any Claim)?, transactionId: TransactionIdentification, node: Node, combinedSealedBox: Data?, attachedFileType: FileType?, personalData: ClaimOnPerson.PersonalData?, peerPublicKeyAsData: PublicKey, peerPublicKeyForEncryptionAsData: PublicKeyForEncryption) {

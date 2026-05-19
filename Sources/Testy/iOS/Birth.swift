@@ -8,6 +8,7 @@
 
 #if os(macOS) || os(iOS)
 import SwiftUI
+import SharedDesignSystem
 import blocks
 import overlayNetwork
 import QuickLook
@@ -110,17 +111,22 @@ struct Birth: View {
          ↓
          （Birth）Person - Birthする
          */
-        VStack {
+        VStack(spacing: 18) {
             /*
              Reveal all Mail about Birth.
              */
-            Text("Received Transactions as Birth-Related")
-                .font(.title)
-            Text("ex. Find a Reference, Request Birth Certificate")
-                .font(.caption2)
-            Text("Birth関連Transaction一覧（ex. 身元保証人を探している、出生証明書リクエスト）")
-                .font(.caption2)
-                .padding()
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Received Transactions as Birth-Related")
+                    .font(.title.bold())
+                Text("ex. Find a Reference, Request Birth Certificate")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("Birth関連Transaction一覧（ex. 身元保証人を探している、出生証明書リクエスト）")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .testyGlassCard()
             Form {
                 if let node = model.ownNode {
                     let _ = Log(node.book.blocks.count)
@@ -317,22 +323,27 @@ struct Birth: View {
                 }   //if
             }   //Form
             .formStyle(.automatic)
+            .scrollContentBackground(.hidden)
+            .background(Color.clear)
             .padding(EdgeInsets(top: 0, leading: 5, bottom: 50, trailing: 5))
-            Button("Find Taker") {
-                self.findTaker()
+            VStack(spacing: 12) {
+                Button("Find Taker") {
+                    self.findTaker()
+                }
+                .buttonStyle(TestyGlassButtonStyle())
+
+                Button("QR Code") {
+                    self.qrRead()
+                }
+                .buttonStyle(TestyGlassButtonStyle())
+
+                Button("Input Taker Address") {
+                    self.inputAddress()
+                }
+                .buttonStyle(TestyGlassButtonStyle())
             }
-            .buttonStyle(TYButtonStyle())
-            .padding()
-            Button("QR Code") {
-                self.qrRead()
-            }
-            .buttonStyle(TYButtonStyle())
-            .padding()
-            Button("Input Taker Address") {
-                self.inputAddress()
-            }
-            .buttonStyle(TYButtonStyle())
-            .padding()
+            .testyGlassCard()
+            .padding(.horizontal, 16)
             .alert(personDuplicationResult, isPresented: $doneCheckDuplicatePerson) {
                 Button("OK", role: .cancel) {
                     Log()
@@ -340,6 +351,7 @@ struct Birth: View {
             }
         }   //VStack
         .navigationBarTitle("Birth")
+        .testyScreen()
     }
     
     func reply(to destinationDhtAddress: OverlayNetworkAddressAsHexString, description: String, transactionType: TransactionType, claim: (any Claim)?, transactionId: TransactionIdentification, node: Node, combinedSealedBox: Data?, attachedFileType: FileType?, personalData: ClaimOnPerson.PersonalData?, peerPublicKeyAsData: PublicKey, peerPublicKeyForEncryptionAsData: PublicKeyForEncryption) {

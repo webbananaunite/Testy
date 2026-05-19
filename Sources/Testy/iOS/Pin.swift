@@ -9,6 +9,7 @@
 #if os(macOS) || os(iOS)
 import SwiftUI
 import blocks
+import SharedDesignSystem
 
 struct Pin: View {
     @EnvironmentObject var model: Model
@@ -17,22 +18,27 @@ struct Pin: View {
     @State var combinedSealedBox: Data?
 
     var body: some View {
-        VStack {
+        VStack(spacing: 18) {
             Text("Taker Address")
+                .font(.headline)
             Text(takerAddress ?? "")
-            .padding()
+                .padding()
+                .testyGlassCard()
             Spacer()
             TextField("Input Pin", text: $pin)
-            .padding()
-                Button(action: {
-                    Log()
-                    self.authPin()
-                }) {
-                    Text("OK")
-                }
+                .textFieldStyle(TestyGlassTextFieldStyle())
+            Button(action: {
+                Log()
+                self.authPin()
+            }) {
+                Text("OK")
+            }
+            .buttonStyle(TestyGlassButtonStyle())
             Spacer()
         }
+        .padding(24)
         .navigationBarTitle("Pin")
+        .testyScreen()
     }
     
     func authPin() {

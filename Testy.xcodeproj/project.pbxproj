@@ -33,6 +33,7 @@
 		9881525B247DE78600C4C791 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98815259247DE78600C4C791 /* LaunchScreen.storyboard */; };
 		9887EBF429776149006E08D2 /* DataArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9887EBF329776149006E08D2 /* DataArithmetic.swift */; };
 		988CB9DF2B43FB83005420E6 /* blocks in Frameworks */ = {isa = PBXBuildFile; productRef = 988CB9DE2B43FB83005420E6 /* blocks */; };
+		9896DA5E2F91D9E200AA8F5E /* SharedDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 9896DA5D2F91D9E200AA8F5E /* SharedDesignSystem */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		98815257247DE78600C4C791 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9881525A247DE78600C4C791 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9887EBF329776149006E08D2 /* DataArithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataArithmetic.swift; sourceTree = "<group>"; };
+		9896DA5C2F91D9B800AA8F5E /* SharedDesignSystem */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SharedDesignSystem; path = ../SharedDesignSystem; sourceTree = SOURCE_ROOT; };
 		98CC20562B43D8B30014B5C0 /* overlayNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = overlayNetwork; path = ../overlayNetwork; sourceTree = "<group>"; };
 		98CC20572B43D9A80014B5C0 /* blocks */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = blocks; path = ../blocks; sourceTree = "<group>"; };
 		98E711522D768FCA003DC112 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9896DA5E2F91D9E200AA8F5E /* SharedDesignSystem in Frameworks */,
 				988CB9DF2B43FB83005420E6 /* blocks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -103,6 +106,7 @@
 			children = (
 				98CC20572B43D9A80014B5C0 /* blocks */,
 				98CC20562B43D8B30014B5C0 /* overlayNetwork */,
+				9896DA5C2F91D9B800AA8F5E /* SharedDesignSystem */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -230,6 +234,7 @@
 			name = Testy;
 			packageProductDependencies = (
 				988CB9DE2B43FB83005420E6 /* blocks */,
+				9896DA5D2F91D9E200AA8F5E /* SharedDesignSystem */,
 			);
 			productName = Testy;
 			productReference = 9881524B247DE78400C4C791 /* Testy.app */;
@@ -622,6 +627,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 988CB9DD2B43FB83005420E6 /* XCRemoteSwiftPackageReference "blocks" */;
 			productName = blocks;
+		};
+		9896DA5D2F91D9E200AA8F5E /* SharedDesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedDesignSystem;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

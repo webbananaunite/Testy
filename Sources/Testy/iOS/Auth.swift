@@ -10,29 +10,7 @@
 import SwiftUI
 import LocalAuthentication
 import blocks
-//import overlayNetworkObjc
-
-struct TYButtonStyle: ButtonStyle {
-    func makeBody(configuration: Self.Configuration) -> some View {
-        configuration.label
-        .padding(.all, 8.0)
-        .overlay(RoundedRectangle(cornerRadius: 10)
-            .stroke(Color.red, lineWidth: 1.0)
-            .frame(width: 200, height: 50, alignment: .center)
-        )
-        .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
-    }
-}
-
-struct TYTextFieldStyle: TextFieldStyle {
-    func _body(configuration: TextField<Self._Label>) -> some View {
-        configuration
-        .padding(.horizontal, 8.0)
-        .padding(.vertical, 16.0)
-        .background(RoundedRectangle(cornerRadius: 10)
-        .strokeBorder(Color.red, lineWidth: 1.0))
-    }
-}
+import SharedDesignSystem
 
 enum Screen: Hashable {
 //    case auth
@@ -52,23 +30,37 @@ struct Auth: View {
 
     var body: some View {
         NavigationStack(path: $model.screens) {
-            VStack {
-                Text(model.overlayNetworkStatus ?? "Welcome")
-                    .padding(.top, 50)
+            VStack(spacing: 28) {
                 Spacer()
-                /*
-                 Menu へ
-                 */
-                Button("Join blocks Network") {
-                    Log()
-                    /*
-                     Check in by Biometric Authentication.
-                     */
-                    self.checkIn()
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("SSN, 住民基本台帳")
+                        .font(.largeTitle.weight(.bold))
+                    Text(model.overlayNetworkStatus ?? "Welcome")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
                 }
-                .buttonStyle(TYButtonStyle())
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .testyGlassCard()
+
+                VStack(spacing: 16) {
+                    Label("Secure access to the blocks network", systemImage: "faceid")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Button("Join blocks Network") {
+                        Log()
+                        /*
+                         Check in by Biometric Authentication.
+                         */
+                        self.checkIn()
+                    }
+                    .buttonStyle(TestyGlassButtonStyle())
+                }
+                .frame(maxWidth: .infinity)
+                .testyGlassCard()
                 Spacer()
             }
+            .padding(24)
             .navigationBarTitle("SSN, 住民基本台帳")
             .navigationDestination(for: Screen.self) { screen in
                 switch screen {
@@ -89,6 +81,7 @@ struct Auth: View {
                 }
             }
         }
+        .testyScreen()
         .onAppear() {
             Log()
             Log(model.semaphore.description)
