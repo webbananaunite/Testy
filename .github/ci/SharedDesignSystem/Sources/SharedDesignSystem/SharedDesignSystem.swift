@@ -68,16 +68,8 @@ public struct TestyGlassButtonStyle: ButtonStyle {
             .frame(minHeight: 54)
             .padding(.horizontal, 18)
             .background {
-                Group {
-                    if #available(iOS 26.0, macOS 26.0, *) {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(.clear)
-                            .glassEffect(.regular.tint(.white.opacity(0.18)).interactive(), in: .rect(cornerRadius: 20))
-                    } else {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                    }
-                }
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(.ultraThinMaterial)
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -97,16 +89,8 @@ public struct TestyGlassTextFieldStyle: TextFieldStyle {
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
             .background {
-                Group {
-                    if #available(iOS 26.0, macOS 26.0, *) {
-                        RoundedRectangle(cornerRadius: 18, style: .continuous)
-                            .fill(.clear)
-                            .glassEffect(.regular.tint(.white.opacity(0.08)), in: .rect(cornerRadius: 18))
-                    } else {
-                        RoundedRectangle(cornerRadius: 18, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                    }
-                }
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(.ultraThinMaterial)
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
@@ -123,7 +107,9 @@ public struct TestyScreenModifier: ViewModifier {
             TestySceneBackground()
             content
         }
+        #if os(iOS)
         .toolbarBackground(.hidden, for: .navigationBar)
+        #endif
     }
 }
 
@@ -134,16 +120,8 @@ public struct TestyGlassCardModifier: ViewModifier {
         content
             .padding(18)
             .background {
-                Group {
-                    if #available(iOS 26.0, macOS 26.0, *) {
-                        RoundedRectangle(cornerRadius: 28, style: .continuous)
-                            .fill(.clear)
-                            .glassEffect(.regular.tint(.white.opacity(0.10)), in: .rect(cornerRadius: 28))
-                    } else {
-                        RoundedRectangle(cornerRadius: 28, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                    }
-                }
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .fill(.ultraThinMaterial)
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 28, style: .continuous)
