@@ -46,6 +46,44 @@ jobs:
         working-directory: Testy
         run: xcodebuild -project Testy.xcodeproj -scheme Testy -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
 
+  unit-test:
+    name: Run Swift package tests
+    runs-on: macos-15
+    steps:
+      - name: Checkout Testy
+        uses: actions/checkout@v5
+        with:
+          path: Testy
+
+      - name: Checkout blocks dependency
+        uses: actions/checkout@v5
+        with:
+          repository: webbananaunite/blocks
+          ref: feature-new-work
+          path: blocks
+
+      - name: Checkout overlayNetwork dependency
+        uses: actions/checkout@v5
+        with:
+          repository: webbananaunite/overlayNetwork
+          ref: feature-new-work
+          path: overlayNetwork
+
+      - name: Prepare SharedDesignSystem dependency
+        run: cp -R Testy/.github/ci/SharedDesignSystem SharedDesignSystem
+
+      - name: Show Swift version
+        working-directory: Testy
+        run: swift --version
+
+      - name: Resolve dependencies
+        working-directory: Testy
+        run: swift package resolve
+
+      - name: Run tests
+        working-directory: Testy
+        run: swift test -v
+
   linux-cross-build:
     name: Cross-build Linux static SDK
     runs-on: macos-15
