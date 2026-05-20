@@ -1,50 +1,117 @@
-name: Swift Package Cross-Platform CI (iOS-GUI & Linux-CUI)
+name: Testy CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
-# ワークフロー全体で Node 24 への移行を先取りして警告を消す
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+permissions:
+  contents: read
 
 jobs:
-  test:
-    name: Test on ${{ matrix.platform }}
-    runs-on: ${{ matrix.os }}
-    
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # 1. iOS (GUI環境・UIKit依存)
-          - platform: iOS
-            os: macos-15
-            run_cmd: "xcodebuild test -scheme \"${{ github.event.repository.name }}\" -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' -quiet"
-            
-          # 2. Linux (CUI環境・デーモン)
-          - platform: Linux
-            os: ubuntu-latest
-            run_cmd: "swift test -v"
-
+  ios-build:
+    name: Build iOS app
+    runs-on: macos-15
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4.2.2
-
-      # 【iOSのみ】Xcode（Swift 6.0を含む環境）を選択
-      - name: Select Xcode Version (macOS)
-        if: matrix.platform == 'iOS'
-        run: sudo xcode-select -s /Applications/Xcode_16.0.app
-
-      # 【Linuxのみ】Swift 6.0 ツールチェーンをセットアップ
-      - name: Setup Swift (Linux)
-        if: matrix.platform == 'Linux'
-        uses: swift-actions/setup-swift@v3
+      - name: Checkout Testy
+        uses: actions/checkout@v5
         with:
-          swift-version: '6.0'
+          path: Testy
 
-      # マトリックスで定義したそれぞれのテストコマンドを実行
-      - name: Run Tests
-        run: ${{ matrix.run_cmd }}
+      - name: Checkout blocks dependency
+        uses: actions/checkout@v5
+        with:
+          repository: webbananaunite/blocks
+          ref: feature-new-work
+          path: blocks
+
+      - name: Checkout overlayNetwork dependency
+        uses: actions/checkout@v5
+        with:
+          repository: webbananaunite/overlayNetwork
+          ref: feature-new-work
+          path: overlayNetwork
+
+      - name: Prepare SharedDesignSystem dependency
+        run: cp -R Testy/.github/ci/SharedDesignSystem SharedDesignSystem
+
+      - name: Show Xcode and Swift versions
+        working-directory: Testy
+        run: |
+          xcodebuild -version
+          swift --version
+
+      - name: Build Testy for iOS
+        working-directory: Testy
+        run: xcodebuild -project Testy.xcodeproj -scheme Testy -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
+
+  linux-cross-build:
+    name: Cross-build Linux static SDK
+    runs-on: macos-15
+    steps:
+      - name: Checkout Testy
+        uses: actions/checkout@v5
+        with:
+          path: Testy
+
+      - name: Checkout blocks dependency
+        uses: actions/checkout@v5
+        with:
+          repository: webbananaunite/blocks
+          ref: feature-new-work
+          path: blocks
+
+      - name: Checkout overlayNetwork dependency
+        uses: actions/checkout@v5
+        with:
+          repository: webbananaunite/overlayNetwork
+          ref: feature-new-work
+          path: overlayNetwork
+
+      - name: Prepare SharedDesignSystem dependency
+        run: cp -R Testy/.github/ci/SharedDesignSystem SharedDesignSystem
+
+      - name: Restore Swiftly cache
+        id: swiftly-cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.swiftly
+            ~/Library/Developer/Toolchains
+          key: ${{ runner.os }}-swiftly-6.1.2-v1
+
+      - name: Install Swift 6.1.2 toolchain
+        if: steps.swiftly-cache.outputs.cache-hit != 'true'
+        run: |
+          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg
+          installer -pkg swiftly.pkg -target CurrentUserHomeDirectory
+          ~/.swiftly/bin/swiftly init --quiet-shell-followup
+          . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
+          hash -r
+          swiftly install 6.1.2
+
+      - name: Show Swift 6.1.2 toolchain
+        run: "$HOME/Library/Developer/Toolchains/swift-6.1.2-RELEASE.xctoolchain/usr/bin/swift --version"
+
+      - name: Restore Static Linux SDK cache
+        id: static-linux-sdk-cache
+        uses: actions/cache@v5
+        with:
+          path: ~/Library/org.swift.swiftpm/swift-sdks
+          key: ${{ runner.os }}-swift-6.1.2-static-linux-sdk-0.0.1-v1
+
+      - name: Install Static Linux SDK
+        if: steps.static-linux-sdk-cache.outputs.cache-hit != 'true'
+        run: |
+          "$HOME/Library/Developer/Toolchains/swift-6.1.2-RELEASE.xctoolchain/usr/bin/swift" sdk install \
+            https://download.swift.org/swift-6.1.2-release/static-sdk/swift-6.1.2-RELEASE/swift-6.1.2-RELEASE_static-linux-0.0.1.artifactbundle.tar.gz \
+            --checksum df0b40b9b582598e7e3d70c82ab503fd6fbfdff71fd17e7f1ab37115a0665b3b
+
+      - name: Show installed Swift SDKs
+        run: "$HOME/Library/Developer/Toolchains/swift-6.1.2-RELEASE.xctoolchain/usr/bin/swift sdk list"
+
+      - name: Cross-build Testy for Linux
+        working-directory: Testy
+        run: |
+          "$HOME/Library/Developer/Toolchains/swift-6.1.2-RELEASE.xctoolchain/usr/bin/swift" build -v --swift-sdk x86_64-swift-linux-musl --build-path .build/linux-musl
