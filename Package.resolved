@@ -1,13 +1,40 @@
 {
-  "originHash" : "bb82be2a944ceefc086e3810039a585b7739985ad65d4f6080187d8dbf726372",
+  "originHash" : "89e5e3d884e722e89e899c76ba050ecd97266a02c41ba441f8eceb00cd7cf0c7",
   "pins" : [
+    {
+      "identity" : "blocks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/webbananaunite/blocks",
+      "state" : {
+        "revision" : "17cb11ab4bd70c58e7f5d28e46fa7b9bd5a7d477",
+        "version" : "0.5.4"
+      }
+    },
+    {
+      "identity" : "overlaynetwork",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/webbananaunite/overlayNetwork",
+      "state" : {
+        "revision" : "95f03332470ee9908394ea8d06655a200d406be0",
+        "version" : "0.5.4"
+      }
+    },
+    {
+      "identity" : "shareddesignsystem",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/webbananaunite/SharedDesignSystem",
+      "state" : {
+        "revision" : "e4c0879dbb3c4674ff1dbaeb3d03ddb420c7a962",
+        "version" : "0.1.0"
+      }
+    },
     {
       "identity" : "swift-asn1",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
       "state" : {
-        "revision" : "f70225981241859eb4aa1a18a75531d26637c8cc",
-        "version" : "1.4.0"
+        "revision" : "eb50cbd14606a9161cbc5d452f18797c90ef0bab",
+        "version" : "1.7.0"
       }
     },
     {
@@ -15,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "334e682869394ee239a57dbe9262bff3cd9495bd",
-        "version" : "3.14.0"
+        "revision" : "95ba0316a9b733e92bb6b071255ff46263bbe7dc",
+        "version" : "3.15.1"
       }
     }
   ],

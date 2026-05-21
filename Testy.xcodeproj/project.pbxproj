@@ -75,9 +75,6 @@
 		98815257247DE78600C4C791 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9881525A247DE78600C4C791 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9887EBF329776149006E08D2 /* DataArithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataArithmetic.swift; sourceTree = "<group>"; };
-		9896DA5C2F91D9B800AA8F5E /* SharedDesignSystem */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SharedDesignSystem; path = ../SharedDesignSystem; sourceTree = SOURCE_ROOT; };
-		98CC20562B43D8B30014B5C0 /* overlayNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = overlayNetwork; path = ../overlayNetwork; sourceTree = "<group>"; };
-		98CC20572B43D9A80014B5C0 /* blocks */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = blocks; path = ../blocks; sourceTree = "<group>"; };
 		98E711522D768FCA003DC112 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,9 +101,6 @@
 		98501C692A8EF7B800B5064B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				98CC20572B43D9A80014B5C0 /* blocks */,
-				98CC20562B43D8B30014B5C0 /* overlayNetwork */,
-				9896DA5C2F91D9B800AA8F5E /* SharedDesignSystem */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -270,6 +264,7 @@
 			mainGroup = 98815242247DE78400C4C791;
 			packageReferences = (
 				988CB9DD2B43FB83005420E6 /* XCRemoteSwiftPackageReference "blocks" */,
+				9896DA5F2F91EFB000AA8F5E /* XCRemoteSwiftPackageReference "SharedDesignSystem" */,
 			);
 			productRefGroup = 9881524C247DE78400C4C791 /* Products */;
 			projectDirPath = "";
@@ -528,7 +523,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0.5.3;
 				DEVELOPMENT_TEAM = 8GS35C2LU7;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../blocks";
 				INFOPLIST_FILE = Testy/XcodeInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -558,7 +552,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0.5.3;
 				DEVELOPMENT_TEAM = 8GS35C2LU7;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../blocks";
 				INFOPLIST_FILE = Testy/XcodeInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -617,7 +610,15 @@
 			repositoryURL = "https://github.com/webbananaunite/blocks";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.3.0;
+				minimumVersion = 0.5.4;
+			};
+		};
+		9896DA5F2F91EFB000AA8F5E /* XCRemoteSwiftPackageReference "SharedDesignSystem" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/webbananaunite/SharedDesignSystem";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -630,6 +631,7 @@
 		};
 		9896DA5D2F91D9E200AA8F5E /* SharedDesignSystem */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 9896DA5F2F91EFB000AA8F5E /* XCRemoteSwiftPackageReference "SharedDesignSystem" */;
 			productName = SharedDesignSystem;
 		};
 /* End XCSwiftPackageProductDependency section */
