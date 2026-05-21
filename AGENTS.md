@@ -72,7 +72,28 @@ ruby -e 'require "yaml"; YAML.load_file(".github/workflows/ci.yml"); puts "YAML 
 - `gh pr create`、`gh pr comment`、`gh pr review` は、ユーザーの依頼または自動レビューの目的に必要な場合のみ使う。
 - 依存関係や toolchain のインストールは、CI の再現やユーザーの依頼に必要な場合に限る。
 - CI では `Testy`、`blocks`、`overlayNetwork` を兄弟ディレクトリに checkout する。
-- `SharedDesignSystem` は現時点で GitHub remote がないローカル兄弟 package なので、CI では `.github/ci/SharedDesignSystem` を `../SharedDesignSystem` として配置する。
+- ローカル path 依存で検証する場合、CI では必要な兄弟 package を checkout または配置する。GitHub tag 依存へ切り替えた PR では、該当 dependency の追加 checkout は原則不要。
+
+## Package.swift の依存関係ルール
+
+- 開発中は、隣接ディレクトリのソースを直接確認できるように `Package.swift` の `dependencies` ではローカル path 依存を使う。
+
+```swift
+.package(name: "blocks", path: "../blocks"),  //using source code in same device.
+.package(name: "SharedDesignSystem", path: "../SharedDesignSystem"),  //using source code in same device.
+```
+
+- pull request を作成または更新する前に、`blocks` と `SharedDesignSystem` のどの GitHub tag を使うかを必ずユーザーに確認する。
+- pull request 用の状態では、ユーザーが指定した tag を使って GitHub tag 依存へ切り替える。
+
+```swift
+.package(url: "https://github.com/webbananaunite/blocks", .upToNextMajor(from: "<user-confirmed-blocks-tag>")), //using source code in github tag
+.package(url: "https://github.com/webbananaunite/SharedDesignSystem", .upToNextMajor(from: "<user-confirmed-shared-design-system-tag>")), //using source code in github tag
+```
+
+- 例として現在想定されている tag は `blocks` が `0.5.3`、`SharedDesignSystem` が `0.1.0` だが、PR ごとに最新の意図をユーザーへ確認する。
+- GitHub tag 依存へ切り替える場合、その tag が GitHub に push 済みであり、PR で検証したい変更を含んでいることを確認する。tag に含まれないローカル変更は CI では検証されない。
+- SwiftPM の version requirement には SemVer として解釈できる tag を使う。`0.1` のような短い tag を使う必要がある場合は、SwiftPM が受け付けるか確認し、問題があれば `0.1.0` のような 3 要素の tag をユーザーに提案する。
 
 ## してはならない操作
 
