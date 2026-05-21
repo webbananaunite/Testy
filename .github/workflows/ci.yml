@@ -19,23 +19,6 @@ jobs:
         with:
           path: Testy
 
-      - name: Checkout blocks dependency
-        uses: actions/checkout@v5
-        with:
-          repository: webbananaunite/blocks
-          ref: feature-new-work
-          path: blocks
-
-      - name: Checkout overlayNetwork dependency
-        uses: actions/checkout@v5
-        with:
-          repository: webbananaunite/overlayNetwork
-          ref: main
-          path: overlayNetwork
-
-      - name: Prepare SharedDesignSystem dependency
-        run: cp -R Testy/.github/ci/SharedDesignSystem SharedDesignSystem
-
       - name: Show Xcode and Swift versions
         working-directory: Testy
         run: |
@@ -54,23 +37,6 @@ jobs:
         uses: actions/checkout@v5
         with:
           path: Testy
-
-      - name: Checkout blocks dependency
-        uses: actions/checkout@v5
-        with:
-          repository: webbananaunite/blocks
-          ref: feature-new-work
-          path: blocks
-
-      - name: Checkout overlayNetwork dependency
-        uses: actions/checkout@v5
-        with:
-          repository: webbananaunite/overlayNetwork
-          ref: main
-          path: overlayNetwork
-
-      - name: Prepare SharedDesignSystem dependency
-        run: cp -R Testy/.github/ci/SharedDesignSystem SharedDesignSystem
 
       - name: Show Swift version
         working-directory: Testy
@@ -92,23 +58,6 @@ jobs:
         uses: actions/checkout@v5
         with:
           path: Testy
-
-      - name: Checkout blocks dependency
-        uses: actions/checkout@v5
-        with:
-          repository: webbananaunite/blocks
-          ref: feature-new-work
-          path: blocks
-
-      - name: Checkout overlayNetwork dependency
-        uses: actions/checkout@v5
-        with:
-          repository: webbananaunite/overlayNetwork
-          ref: main
-          path: overlayNetwork
-
-      - name: Prepare SharedDesignSystem dependency
-        run: cp -R Testy/.github/ci/SharedDesignSystem SharedDesignSystem
 
       - name: Restore Swiftly cache
         id: swiftly-cache
