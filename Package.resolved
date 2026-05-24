@@ -1,5 +1,5 @@
 {
-  "originHash" : "b28ba646fcc33c93faa176be6d515da41fba7449954a010d52f31311d0ee7028",
+  "originHash" : "89e5e3d884e722e89e899c76ba050ecd97266a02c41ba441f8eceb00cd7cf0c7",
   "pins" : [
     {
       "identity" : "blocks",
@@ -22,10 +22,10 @@
     {
       "identity" : "shareddesignsystem",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/webbananaunite/overlayNetwork",
+      "location" : "https://github.com/webbananaunite/SharedDesignSystem",
       "state" : {
-        "revision" : "95f03332470ee9908394ea8d06655a200d406be0",
-        "version" : "0.5.4"
+        "revision" : "e4c0879dbb3c4674ff1dbaeb3d03ddb420c7a962",
+        "version" : "0.1.0"
       }
     },
     {
